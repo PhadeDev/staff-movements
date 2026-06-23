@@ -254,7 +254,7 @@ Screens:
             VerticalAlign: =VerticalAlign.Middle
       - galMovements:
           Control: Gallery@2.15.0
-          Variant: verticalGallery
+          Variant: Vertical
           Properties:
             X: =0
             Y: =184
