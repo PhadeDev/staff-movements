@@ -1,0 +1,265 @@
+- scrArchive:
+    Control: Screen
+    Properties:
+      Fill: =RGBA(248,248,248,1)
+      OnVisible: |-
+        =ClearCollect(colMovements, 'Staff Movements (LTD)')
+    Children:
+      - recHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =0
+            Width: =1366
+            Height: =56
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - btnArchiveBack:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =8
+            Y: =8
+            Width: =40
+            Height: =40
+            Text: ="‹"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(255,255,255,0.12)
+            HoverFill: =RGBA(255,255,255,0.22)
+            PressedFill: =RGBA(255,255,255,0.32)
+            DisabledFill: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            Size: =24
+            OnSelect: =Navigate(scrDashboard, ScreenTransition.UnCover)
+      - lblArchiveTitle:
+          Control: Label@2.5.1
+          Properties:
+            X: =60
+            Y: =0
+            Width: =700
+            Height: =56
+            Text: ="Archive"
+            Color: =RGBA(255,255,255,1)
+            Size: =18
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - lblArchiveInfo:
+          Control: Label@2.5.1
+          Properties:
+            X: =800
+            Y: =0
+            Width: =550
+            Height: =56
+            Text: ="Records completed more than 7 days ago"
+            Color: =RGBA(255,255,255,0.65)
+            Size: =12
+            Align: =Align.Right
+            PaddingRight: =20
+            VerticalAlign: =VerticalAlign.Middle
+      - recListHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =56
+            Width: =1366
+            Height: =32
+            Fill: =RGBA(230,235,233,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblColName:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =56
+            Width: =400
+            Height: =32
+            Text: ="Name"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - lblColType:
+          Control: Label@2.5.1
+          Properties:
+            X: =440
+            Y: =56
+            Width: =240
+            Height: =32
+            Text: ="Movement Type"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - lblColCompleted:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =56
+            Width: =200
+            Height: =32
+            Text: ="Date Completed"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - lblColArchived:
+          Control: Label@2.5.1
+          Properties:
+            X: =920
+            Y: =56
+            Width: =200
+            Height: =32
+            Text: ="Archived"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - galArchive:
+          Control: Gallery@2.15.0
+          Variant: verticalGallery
+          Properties:
+            X: =0
+            Y: =88
+            Width: =1366
+            Height: =680
+            Items: |-
+              =Sort(
+                  Filter(
+                      colMovements,
+                      Complete &&
+                      !IsBlank(DateCompleted) &&
+                      DateAdd(DateCompleted, 7, TimeUnit.Days) < Today()
+                  ),
+                  DateCompleted,
+                  SortOrder.Descending
+              )
+            TemplateSize: =64
+            TemplatePadding: =0
+            ShowScrollbar: =true
+          Children:
+            - recRowBg:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  X: =0
+                  Y: =0
+                  Width: =1366
+                  Height: =64
+                  Fill: =If(Mod(ThisItem.ID, 2) = 0, RGBA(255,255,255,1), RGBA(246,249,248,1))
+                  HoverFill: =RGBA(218,232,229,1)
+                  PressedFill: =RGBA(200,220,216,1)
+                  DisabledFill: =If(Mod(ThisItem.ID, 2) = 0, RGBA(255,255,255,1), RGBA(246,249,248,1))
+                  BorderThickness: =0
+                  Text: =""
+                  OnSelect: |-
+                    =Set(varSelectedRecord, ThisItem);
+                    Navigate(scrRecord, ScreenTransition.Cover)
+            - recArchiveStripe:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  X: =0
+                  Y: =0
+                  Width: =5
+                  Height: =64
+                  Fill: =RGBA(150,150,150,1)
+                  HoverFill: =Self.Fill
+                  PressedFill: =Self.Fill
+                  DisabledFill: =Self.Fill
+                  BorderThickness: =0
+                  Text: =""
+                  DisplayMode: =DisplayMode.View
+            - lblArchiveName:
+                Control: Label@2.5.1
+                Properties:
+                  X: =20
+                  Y: =10
+                  Width: =410
+                  Height: =28
+                  Text: =ThisItem.Title
+                  Size: =14
+                  FontWeight: =FontWeight.Semibold
+                  Color: =RGBA(80,80,80,1)
+                  VerticalAlign: =VerticalAlign.Middle
+            - lblArchivePos:
+                Control: Label@2.5.1
+                Properties:
+                  X: =20
+                  Y: =38
+                  Width: =300
+                  Height: =20
+                  Text: =Coalesce(ThisItem.'Position Type'.Value, "—")
+                  Size: =11
+                  Color: =RGBA(150,150,150,1)
+            - lblArchiveType:
+                Control: Label@2.5.1
+                Properties:
+                  X: =440
+                  Y: =18
+                  Width: =240
+                  Height: =28
+                  Text: =Coalesce(ThisItem.'Movement Type'.Value, "—")
+                  Size: =13
+                  Color: =RGBA(120,120,120,1)
+                  VerticalAlign: =VerticalAlign.Middle
+            - lblArchiveCompleted:
+                Control: Label@2.5.1
+                Properties:
+                  X: =700
+                  Y: =18
+                  Width: =200
+                  Height: =28
+                  Text: =If(IsBlank(ThisItem.DateCompleted), "—", Text(ThisItem.DateCompleted, "dd mmm yyyy"))
+                  Size: =13
+                  Color: =RGBA(120,120,120,1)
+                  VerticalAlign: =VerticalAlign.Middle
+            - lblArchiveTag:
+                Control: Label@2.5.1
+                Properties:
+                  X: =920
+                  Y: =18
+                  Width: =110
+                  Height: =28
+                  Text: ="Archived"
+                  Color: =RGBA(100,100,100,1)
+                  Fill: =RGBA(220,220,220,1)
+                  Size: =11
+                  FontWeight: =FontWeight.Semibold
+                  Align: =Align.Center
+                  VerticalAlign: =VerticalAlign.Middle
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+            - recArchiveDivider:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  X: =0
+                  Y: =63
+                  Width: =1366
+                  Height: =1
+                  Fill: =RGBA(220,224,222,1)
+                  HoverFill: =Self.Fill
+                  PressedFill: =Self.Fill
+                  DisabledFill: =Self.Fill
+                  BorderThickness: =0
+                  Text: =""
+                  DisplayMode: =DisplayMode.View
+      - lblArchiveEmpty:
+          Control: Label@2.5.1
+          Properties:
+            X: =433
+            Y: =400
+            Width: =500
+            Height: =60
+            Text: ="No archived records yet."
+            Visible: =CountRows(galArchive.AllItems) = 0
+            Color: =RGBA(150,150,150,1)
+            Size: =16
+            Align: =Align.Center

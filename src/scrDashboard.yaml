@@ -1,0 +1,416 @@
+- scrDashboard:
+    Control: Screen
+    Properties:
+      Fill: =RGBA(248,248,248,1)
+      OnVisible: |-
+        =ClearCollect(colMovements, 'Staff Movements (LTD)')
+    Children:
+      - recHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =0
+            Width: =1366
+            Height: =56
+            Fill: =RGBA(0,78,66,1)
+            DisabledFill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,78,66,1)
+            PressedFill: =RGBA(0,78,66,1)
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblAppTitle:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =0
+            Width: =700
+            Height: =56
+            Text: ="Staff Movements"
+            Color: =RGBA(255,255,255,1)
+            Size: =18
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - lblUserName:
+          Control: Label@2.5.1
+          Properties:
+            X: =966
+            Y: =0
+            Width: =380
+            Height: =56
+            Text: =User().FullName
+            Color: =RGBA(255,255,255,0.75)
+            Size: =13
+            Align: =Align.Right
+            PaddingRight: =20
+            VerticalAlign: =VerticalAlign.Middle
+      - recTabBar:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =56
+            Width: =1366
+            Height: =44
+            Fill: =RGBA(0,55,46,1)
+            DisabledFill: =RGBA(0,55,46,1)
+            HoverFill: =RGBA(0,55,46,1)
+            PressedFill: =RGBA(0,55,46,1)
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - btnTabAll:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =20
+            Y: =56
+            Width: =96
+            Height: =44
+            Text: ="All"
+            Color: =If(varTab = "All", RGBA(255,255,255,1), RGBA(255,255,255,0.55))
+            Fill: =If(varTab = "All", RGBA(255,255,255,0.18), RGBA(0,0,0,0))
+            HoverFill: =RGBA(255,255,255,0.1)
+            PressedFill: =RGBA(255,255,255,0.22)
+            DisabledFill: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            Size: =14
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Set(varTab, "All")
+      - btnTabAdmin:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =116
+            Y: =56
+            Width: =96
+            Height: =44
+            Text: ="Admin"
+            Color: =If(varTab = "Admin", RGBA(255,255,255,1), RGBA(255,255,255,0.55))
+            Fill: =If(varTab = "Admin", RGBA(255,255,255,0.18), RGBA(0,0,0,0))
+            HoverFill: =RGBA(255,255,255,0.1)
+            PressedFill: =RGBA(255,255,255,0.22)
+            DisabledFill: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            Size: =14
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Set(varTab, "Admin")
+      - btnTabIX:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =212
+            Y: =56
+            Width: =96
+            Height: =44
+            Text: ="IX"
+            Color: =If(varTab = "IX", RGBA(255,255,255,1), RGBA(255,255,255,0.55))
+            Fill: =If(varTab = "IX", RGBA(255,255,255,0.18), RGBA(0,0,0,0))
+            HoverFill: =RGBA(255,255,255,0.1)
+            PressedFill: =RGBA(255,255,255,0.22)
+            DisabledFill: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            Size: =14
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Set(varTab, "IX")
+      - btnTabIM:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =308
+            Y: =56
+            Width: =96
+            Height: =44
+            Text: ="IM"
+            Color: =If(varTab = "IM", RGBA(255,255,255,1), RGBA(255,255,255,0.55))
+            Fill: =If(varTab = "IM", RGBA(255,255,255,0.18), RGBA(0,0,0,0))
+            HoverFill: =RGBA(255,255,255,0.1)
+            PressedFill: =RGBA(255,255,255,0.22)
+            DisabledFill: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            Size: =14
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Set(varTab, "IM")
+      - btnArchiveLink:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1216
+            Y: =56
+            Width: =130
+            Height: =44
+            Text: ="Archive ›"
+            Color: =RGBA(255,255,255,0.55)
+            Fill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(255,255,255,0.1)
+            PressedFill: =RGBA(255,255,255,0.2)
+            DisabledFill: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            Size: =13
+            OnSelect: =Navigate(scrArchive, ScreenTransition.Cover)
+      - recSearchBar:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =100
+            Width: =1366
+            Height: =52
+            Fill: =RGBA(255,255,255,1)
+            DisabledFill: =RGBA(255,255,255,1)
+            HoverFill: =RGBA(255,255,255,1)
+            PressedFill: =RGBA(255,255,255,1)
+            BorderThickness: =0
+            BorderColor: =RGBA(220,220,220,1)
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - txtSearch:
+          Control: ModernTextInput@1.1.0
+          Properties:
+            X: =16
+            Y: =106
+            Width: =480
+            Height: =40
+            Placeholder: ="Search by name..."
+            Type: =TextInputType.Search
+      - btnAddNew:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =1230
+            Y: =108
+            Width: =120
+            Height: =36
+            Text: ="+ Add New"
+            BasePaletteColor: =RGBA(0,78,66,1)
+            OnSelect: |-
+              =Set(varSelectedRecord, Blank());
+              Navigate(scrAdd, ScreenTransition.Cover)
+      - recListHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =152
+            Width: =1366
+            Height: =32
+            Fill: =RGBA(230,235,233,1)
+            DisabledFill: =RGBA(230,235,233,1)
+            HoverFill: =RGBA(230,235,233,1)
+            PressedFill: =RGBA(230,235,233,1)
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblColName:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =152
+            Width: =400
+            Height: =32
+            Text: ="Name"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - lblColType:
+          Control: Label@2.5.1
+          Properties:
+            X: =440
+            Y: =152
+            Width: =240
+            Height: =32
+            Text: ="Movement Type"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - lblColDate:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =152
+            Width: =200
+            Height: =32
+            Text: ="Start Date"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - lblColDuties:
+          Control: Label@2.5.1
+          Properties:
+            X: =920
+            Y: =152
+            Width: =200
+            Height: =32
+            Text: =If(varTab = "All", "", varTab & " Duties")
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - lblColStatus:
+          Control: Label@2.5.1
+          Properties:
+            X: =1200
+            Y: =152
+            Width: =150
+            Height: =32
+            Text: ="Status"
+            Size: =11
+            FontWeight: =FontWeight.Semibold
+            Color: =RGBA(80,80,80,1)
+            VerticalAlign: =VerticalAlign.Middle
+      - galMovements:
+          Control: Gallery@2.15.0
+          Variant: verticalGallery
+          Properties:
+            X: =0
+            Y: =184
+            Width: =1366
+            Height: =584
+            Items: |-
+              =Sort(
+                  Filter(
+                      colMovements,
+                      (Not(Complete) || IsBlank(DateCompleted) ||
+                      DateAdd(DateCompleted, 7, TimeUnit.Days) >= Today()) &&
+                      (IsBlank(txtSearch.Text) ||
+                      txtSearch.Text in Title)
+                  ),
+                  'Confirmed Start Date',
+                  SortOrder.Descending
+              )
+            TemplateSize: =68
+            TemplatePadding: =0
+            ShowScrollbar: =true
+          Children:
+            - recRowBg:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  X: =0
+                  Y: =0
+                  Width: =1366
+                  Height: =68
+                  Fill: =If(Mod(ThisItem.ID, 2) = 0, RGBA(255,255,255,1), RGBA(246,249,248,1))
+                  HoverFill: =RGBA(218,232,229,1)
+                  PressedFill: =RGBA(200,220,216,1)
+                  DisabledFill: =If(Mod(ThisItem.ID, 2) = 0, RGBA(255,255,255,1), RGBA(246,249,248,1))
+                  BorderThickness: =0
+                  Text: =""
+                  OnSelect: |-
+                    =Set(varSelectedRecord, ThisItem);
+                    Navigate(scrRecord, ScreenTransition.Cover)
+            - recStatusStripe:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  X: =0
+                  Y: =0
+                  Width: =5
+                  Height: =68
+                  Fill: =If(ThisItem.Complete, RGBA(34,139,34,1), If(ThisItem.'Movement Type'.Value = "Leaving Branch" || ThisItem.'Movement Type'.Value = "Leaving MoD", RGBA(163,100,0,1), RGBA(0,78,66,1)))
+                  DisabledFill: =If(ThisItem.Complete, RGBA(34,139,34,1), If(ThisItem.'Movement Type'.Value = "Leaving Branch" || ThisItem.'Movement Type'.Value = "Leaving MoD", RGBA(163,100,0,1), RGBA(0,78,66,1)))
+                  HoverFill: =Self.Fill
+                  PressedFill: =Self.Fill
+                  BorderThickness: =0
+                  Text: =""
+                  DisplayMode: =DisplayMode.View
+            - lblRowName:
+                Control: Label@2.5.1
+                Properties:
+                  X: =20
+                  Y: =6
+                  Width: =410
+                  Height: =30
+                  Text: =ThisItem.Title
+                  Size: =15
+                  FontWeight: =FontWeight.Semibold
+                  Color: =RGBA(28,28,28,1)
+                  VerticalAlign: =VerticalAlign.Middle
+                  Overflow: =Overflow.Hidden
+            - lblRowPosition:
+                Control: Label@2.5.1
+                Properties:
+                  X: =20
+                  Y: =38
+                  Width: =300
+                  Height: =22
+                  Text: =Coalesce(ThisItem.'Position Type'.Value, "—")
+                  Size: =11
+                  Color: =RGBA(120,120,120,1)
+            - lblRowType:
+                Control: Label@2.5.1
+                Properties:
+                  X: =440
+                  Y: =18
+                  Width: =240
+                  Height: =32
+                  Text: =Coalesce(ThisItem.'Movement Type'.Value, "Not set")
+                  Size: =13
+                  Color: =RGBA(60,60,60,1)
+                  VerticalAlign: =VerticalAlign.Middle
+            - lblRowDate:
+                Control: Label@2.5.1
+                Properties:
+                  X: =700
+                  Y: =18
+                  Width: =200
+                  Height: =32
+                  Text: =If(IsBlank(ThisItem.'Confirmed Start Date'), "—", Text(ThisItem.'Confirmed Start Date', "dd mmm yyyy"))
+                  Size: =13
+                  Color: =RGBA(60,60,60,1)
+                  VerticalAlign: =VerticalAlign.Middle
+            - lblRowDutiesCount:
+                Control: Label@2.5.1
+                Properties:
+                  X: =920
+                  Y: =14
+                  Width: =180
+                  Height: =36
+                  Visible: =varTab <> "All"
+                  Text: =If(Switch(varTab,"Admin",If(IsBlank(ThisItem.Add_x0020_to_x0020_ACOS_x0020_Ex),1,0)+If(IsBlank(ThisItem.'Added/Removed to Training Matrix'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Leave Tracker'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Excel Contact List'),1,0)+If(IsBlank(ThisItem.'Added/Removed ACOS Execs Invites'),1,0),"IX",If(IsBlank(ThisItem.'Added/Removed on Org Chart'),1,0)+If(IsBlank(ThisItem.'Added/Removed From Branch Structure'),1,0)+If(IsBlank(ThisItem.'Added/Removed SP Team Landing Page'),1,0),"IM",If(IsBlank(ThisItem.'Confirm BPS Cleared'),1,0)+If(IsBlank(ThisItem.'MODNet Account Request Submitted to iHub'),1,0)+If(IsBlank(ThisItem.'MML Requested via OPBC'),1,0)+If(IsBlank(ThisItem.'MML Issued'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Outlook contact lists'),1,0)+If(IsBlank(ThisItem.'Added/Removed Share Army-Cadets MS Teams'),1,0)+If(IsBlank(ThisItem.'Added/Removed Sharing Outlook Contacts'),1,0),0)=0,"All done",Text(Switch(varTab,"Admin",If(IsBlank(ThisItem.Add_x0020_to_x0020_ACOS_x0020_Ex),1,0)+If(IsBlank(ThisItem.'Added/Removed to Training Matrix'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Leave Tracker'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Excel Contact List'),1,0)+If(IsBlank(ThisItem.'Added/Removed ACOS Execs Invites'),1,0),"IX",If(IsBlank(ThisItem.'Added/Removed on Org Chart'),1,0)+If(IsBlank(ThisItem.'Added/Removed From Branch Structure'),1,0)+If(IsBlank(ThisItem.'Added/Removed SP Team Landing Page'),1,0),"IM",If(IsBlank(ThisItem.'Confirm BPS Cleared'),1,0)+If(IsBlank(ThisItem.'MODNet Account Request Submitted to iHub'),1,0)+If(IsBlank(ThisItem.'MML Requested via OPBC'),1,0)+If(IsBlank(ThisItem.'MML Issued'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Outlook contact lists'),1,0)+If(IsBlank(ThisItem.'Added/Removed Share Army-Cadets MS Teams'),1,0)+If(IsBlank(ThisItem.'Added/Removed Sharing Outlook Contacts'),1,0),0))&" pending")
+                  Fill: =If(Switch(varTab,"Admin",If(IsBlank(ThisItem.Add_x0020_to_x0020_ACOS_x0020_Ex),1,0)+If(IsBlank(ThisItem.'Added/Removed to Training Matrix'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Leave Tracker'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Excel Contact List'),1,0)+If(IsBlank(ThisItem.'Added/Removed ACOS Execs Invites'),1,0),"IX",If(IsBlank(ThisItem.'Added/Removed on Org Chart'),1,0)+If(IsBlank(ThisItem.'Added/Removed From Branch Structure'),1,0)+If(IsBlank(ThisItem.'Added/Removed SP Team Landing Page'),1,0),"IM",If(IsBlank(ThisItem.'Confirm BPS Cleared'),1,0)+If(IsBlank(ThisItem.'MODNet Account Request Submitted to iHub'),1,0)+If(IsBlank(ThisItem.'MML Requested via OPBC'),1,0)+If(IsBlank(ThisItem.'MML Issued'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Outlook contact lists'),1,0)+If(IsBlank(ThisItem.'Added/Removed Share Army-Cadets MS Teams'),1,0)+If(IsBlank(ThisItem.'Added/Removed Sharing Outlook Contacts'),1,0),0)=0,RGBA(210,240,220,1),RGBA(255,237,210,1))
+                  Color: =If(Switch(varTab,"Admin",If(IsBlank(ThisItem.Add_x0020_to_x0020_ACOS_x0020_Ex),1,0)+If(IsBlank(ThisItem.'Added/Removed to Training Matrix'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Leave Tracker'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Excel Contact List'),1,0)+If(IsBlank(ThisItem.'Added/Removed ACOS Execs Invites'),1,0),"IX",If(IsBlank(ThisItem.'Added/Removed on Org Chart'),1,0)+If(IsBlank(ThisItem.'Added/Removed From Branch Structure'),1,0)+If(IsBlank(ThisItem.'Added/Removed SP Team Landing Page'),1,0),"IM",If(IsBlank(ThisItem.'Confirm BPS Cleared'),1,0)+If(IsBlank(ThisItem.'MODNet Account Request Submitted to iHub'),1,0)+If(IsBlank(ThisItem.'MML Requested via OPBC'),1,0)+If(IsBlank(ThisItem.'MML Issued'),1,0)+If(IsBlank(ThisItem.'Added/Removed on Outlook contact lists'),1,0)+If(IsBlank(ThisItem.'Added/Removed Share Army-Cadets MS Teams'),1,0)+If(IsBlank(ThisItem.'Added/Removed Sharing Outlook Contacts'),1,0),0)=0,RGBA(0,100,30,1),RGBA(140,70,0,1))
+                  Size: =12
+                  FontWeight: =FontWeight.Semibold
+                  Align: =Align.Center
+                  VerticalAlign: =VerticalAlign.Middle
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+            - lblRowStatus:
+                Control: Label@2.5.1
+                Properties:
+                  X: =1200
+                  Y: =18
+                  Width: =120
+                  Height: =32
+                  Text: =If(ThisItem.Complete, "Complete", "Active")
+                  Color: =If(ThisItem.Complete, RGBA(0,100,30,1), RGBA(0,78,66,1))
+                  Fill: =If(ThisItem.Complete, RGBA(210,240,220,1), RGBA(220,238,234,1))
+                  Size: =12
+                  FontWeight: =FontWeight.Semibold
+                  Align: =Align.Center
+                  VerticalAlign: =VerticalAlign.Middle
+                  RadiusTopLeft: =12
+                  RadiusTopRight: =12
+                  RadiusBottomLeft: =12
+                  RadiusBottomRight: =12
+            - recRowDivider:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  X: =0
+                  Y: =67
+                  Width: =1366
+                  Height: =1
+                  Fill: =RGBA(220,224,222,1)
+                  DisabledFill: =RGBA(220,224,222,1)
+                  HoverFill: =RGBA(220,224,222,1)
+                  PressedFill: =RGBA(220,224,222,1)
+                  BorderThickness: =0
+                  Text: =""
+                  DisplayMode: =DisplayMode.View
+      - lblEmptyState:
+          Control: Label@2.5.1
+          Properties:
+            X: =433
+            Y: =420
+            Width: =500
+            Height: =60
+            Text: ="No active movements found."
+            Visible: =CountRows(galMovements.AllItems) = 0
+            Color: =RGBA(150,150,150,1)
+            Size: =16
+            Align: =Align.Center

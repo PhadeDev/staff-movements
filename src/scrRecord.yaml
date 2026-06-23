@@ -1,0 +1,1670 @@
+- scrRecord:
+    Control: Screen
+    Properties:
+      Fill: =RGBA(248,248,248,1)
+      OnVisible: |-
+        =Set(varShowEditPanel, false);
+        Set(varShowLeaverPanel, false)
+    Children:
+      - recHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =0
+            Width: =1366
+            Height: =56
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - btnBack:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =8
+            Y: =8
+            Width: =40
+            Height: =40
+            Text: ="‹"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(255,255,255,0.12)
+            HoverFill: =RGBA(255,255,255,0.22)
+            PressedFill: =RGBA(255,255,255,0.32)
+            DisabledFill: =RGBA(0,0,0,0)
+            BorderThickness: =0
+            Size: =24
+            OnSelect: |-
+              =If(
+                  varShowLeaverPanel || varShowEditPanel,
+                  Set(varShowLeaverPanel, false);
+                  Set(varShowEditPanel, false),
+                  Navigate(scrDashboard, ScreenTransition.UnCover)
+              )
+      - lblRecordTitle:
+          Control: Label@2.5.1
+          Properties:
+            X: =60
+            Y: =0
+            Width: =900
+            Height: =56
+            Text: =Coalesce(varSelectedRecord.Title, "Record")
+            Color: =RGBA(255,255,255,1)
+            Size: =18
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - lblCompleteTag:
+          Control: Label@2.5.1
+          Properties:
+            X: =1120
+            Y: =14
+            Width: =110
+            Height: =28
+            Text: ="Complete"
+            Visible: =varSelectedRecord.Complete
+            Color: =RGBA(0,100,30,1)
+            Fill: =RGBA(210,245,220,1)
+            Size: =12
+            FontWeight: =FontWeight.Semibold
+            Align: =Align.Center
+            VerticalAlign: =VerticalAlign.Middle
+            RadiusTopLeft: =14
+            RadiusTopRight: =14
+            RadiusBottomLeft: =14
+            RadiusBottomRight: =14
+      - recActionBar:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =56
+            Width: =1366
+            Height: =52
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderColor: =RGBA(220,220,220,1)
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - recActionBarBorder:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =107
+            Width: =1366
+            Height: =1
+            Fill: =RGBA(220,220,220,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - btnEditDetails:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =20
+            Y: =64
+            Width: =130
+            Height: =36
+            Text: ="Edit Details"
+            BasePaletteColor: =RGBA(80,80,80,1)
+            OnSelect: =Set(varShowEditPanel, true)
+      - btnMarkComplete:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =164
+            Y: =64
+            Width: =160
+            Height: =36
+            Text: ="Mark Complete"
+            BasePaletteColor: =RGBA(0,78,66,1)
+            Visible: =!varSelectedRecord.Complete
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {Complete: true, DateCompleted: Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)');
+              Notify("Marked as complete.", NotificationType.Success)
+      - btnReOpen:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =164
+            Y: =64
+            Width: =120
+            Height: =36
+            Text: ="Re-Open"
+            BasePaletteColor: =RGBA(120,120,120,1)
+            Visible: =varSelectedRecord.Complete
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {Complete: false, DateCompleted: Blank()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)');
+              Notify("Record re-opened.", NotificationType.Success)
+      - btnLeaverProcess:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =1166
+            Y: =64
+            Width: =180
+            Height: =36
+            Text: ="Leaver Process ›"
+            BasePaletteColor: =RGBA(163,100,0,1)
+            Visible: =!(varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+            OnSelect: =Set(varShowLeaverPanel, true)
+      - recCoreCard:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =12
+            Y: =116
+            Width: =1342
+            Height: =180
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderColor: =RGBA(210,218,215,1)
+            BorderThickness: =1
+            RadiusTopLeft: =8
+            RadiusTopRight: =8
+            RadiusBottomLeft: =8
+            RadiusBottomRight: =8
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblCoreMovType:
+          Control: Label@2.5.1
+          Properties:
+            X: =28
+            Y: =124
+            Width: =300
+            Height: =24
+            Text: =Coalesce(varSelectedRecord.'Movement Type'.Value, "Movement type not set")
+            Color: =If( varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD", RGBA(140,70,0,1), RGBA(0,78,66,1) )
+            Fill: =If( varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD", RGBA(255,237,210,1), RGBA(220,238,234,1) )
+            Size: =12
+            FontWeight: =FontWeight.Semibold
+            PaddingLeft: =10
+            PaddingRight: =10
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+      - lblCoreName:
+          Control: Label@2.5.1
+          Properties:
+            X: =28
+            Y: =152
+            Width: =860
+            Height: =40
+            Text: =Coalesce(varSelectedRecord.Title, "—")
+            Color: =RGBA(24,24,24,1)
+            Size: =22
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - lblCorePositionType:
+          Control: Label@2.5.1
+          Properties:
+            X: =28
+            Y: =196
+            Width: =300
+            Height: =24
+            Text: =Coalesce(varSelectedRecord.'Position Type'.Value, "Position not set")
+            Color: =RGBA(100,100,100,1)
+            Size: =13
+      - lblCoreRole:
+          Control: Label@2.5.1
+          Properties:
+            X: =28
+            Y: =224
+            Width: =500
+            Height: =24
+            Text: =If(IsBlank(varSelectedRecord.'Desired Role Name'), "Role not set", "Role: " & varSelectedRecord.'Desired Role Name')
+            Color: =RGBA(100,100,100,1)
+            Size: =13
+      - lblCoreStaffNo:
+          Control: Label@2.5.1
+          Properties:
+            X: =900
+            Y: =152
+            Width: =440
+            Height: =24
+            Text: =If(IsBlank(varSelectedRecord.Staff_x002f_ServiceNo), "No staff number", "Staff No: " & varSelectedRecord.Staff_x002f_ServiceNo)
+            Color: =RGBA(100,100,100,1)
+            Size: =13
+            Align: =Align.Right
+      - recDatesCard:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =12
+            Y: =304
+            Width: =1342
+            Height: =100
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderColor: =RGBA(210,218,215,1)
+            BorderThickness: =1
+            RadiusTopLeft: =8
+            RadiusTopRight: =8
+            RadiusBottomLeft: =8
+            RadiusBottomRight: =8
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblStartDateLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =28
+            Y: =310
+            Width: =200
+            Height: =18
+            Text: ="Confirmed Start Date"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+      - dpStartDate:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            X: =28
+            Y: =328
+            Width: =300
+            Height: =40
+            DefaultDate: =varSelectedRecord.'Confirmed Start Date'
+            OnChange: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Confirmed Start Date': Self.SelectedDate}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblLeavingDateLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =310
+            Width: =220
+            Height: =18
+            Text: ="Confirmed Leaving Date"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+      - dpLeavingDate:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            X: =700
+            Y: =328
+            Width: =300
+            Height: =40
+            DefaultDate: =varSelectedRecord.'Confirmed Leaving Date'
+            OnChange: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Confirmed Leaving Date': Self.SelectedDate}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - recAdminHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =416
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(230,237,235,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblAdminHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =416
+            Width: =400
+            Height: =36
+            Text: ="Admin Duties"
+            Color: =RGBA(0,78,66,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - lblAdminBranchExecs:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =458
+            Width: =360
+            Height: =40
+            Text: ="Branch Execs Invites" & Char(10) & If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), "Not done", Text(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex, "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnAdminBranchExecsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =462
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex)
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {Add_x0020_to_x0020_ACOS_x0020_Ex: Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblAdminTrainingMatrix:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =458
+            Width: =360
+            Height: =40
+            Text: ="Training Matrix" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), "Not done", Text(varSelectedRecord.'Added/Removed to Training Matrix', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnAdminTrainingMatrixToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =462
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed to Training Matrix')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed to Training Matrix': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - recAdminRow2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =504
+            Width: =1366
+            Height: =1
+            Fill: =RGBA(230,237,235,0.4)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblAdminLeaveTracker:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =510
+            Width: =360
+            Height: =40
+            Text: ="Leave Tracker" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), "Not done", Text(varSelectedRecord.'Added/Removed on Leave Tracker', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnAdminLeaveTrackerToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =514
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Leave Tracker': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblAdminExcelContacts:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =510
+            Width: =360
+            Height: =40
+            Text: ="Excel Contact List" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), "Not done", Text(varSelectedRecord.'Added/Removed on Excel Contact List', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnAdminExcelContactsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =514
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Excel Contact List': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblAdminACOSLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =558
+            Width: =200
+            Height: =18
+            Text: ="ACOS Execs Invites"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+      - drpAdminACOS:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            X: =20
+            Y: =576
+            Width: =300
+            Height: =40
+            Items: =["Added", "Removed", "N/A"]
+            Default: =If(IsBlank(varSelectedRecord.'Added/Removed ACOS Execs Invites'), {Value: ""}, {Value: varSelectedRecord.'Added/Removed ACOS Execs Invites'.Value})
+            OnChange: |-
+              =If(
+                  !IsBlank(Self.Selected.Value),
+                  Patch('Staff Movements (LTD)', varSelectedRecord,
+                      {'Added/Removed ACOS Execs Invites': {Value: Self.Selected.Value}}
+                  );
+                  Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+                  ClearCollect(colMovements, 'Staff Movements (LTD)')
+              )
+      - recIXHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =632
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(230,237,235,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblIXHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =632
+            Width: =400
+            Height: =36
+            Text: ="IX Duties"
+            Color: =RGBA(0,78,66,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - lblIXOrgChart:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =674
+            Width: =360
+            Height: =40
+            Text: ="Org Chart" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), "Not done", Text(varSelectedRecord.'Added/Removed on Org Chart', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIXOrgChartToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =678
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Org Chart')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Org Chart': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIXBranchStructure:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =674
+            Width: =360
+            Height: =40
+            Text: ="Branch Structure" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), "Not done", Text(varSelectedRecord.'Added/Removed From Branch Structure', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIXBranchStructureToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =678
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed From Branch Structure')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed From Branch Structure': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIXSPLanding:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =722
+            Width: =360
+            Height: =40
+            Text: ="SP Team Landing Page" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), "Not done", Text(varSelectedRecord.'Added/Removed SP Team Landing Page', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIXSPLandingToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =726
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed SP Team Landing Page': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - recIMHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =776
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(230,237,235,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblIMHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =776
+            Width: =400
+            Height: =36
+            Text: ="IM Duties"
+            Color: =RGBA(0,78,66,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - lblIMBPS:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =818
+            Width: =360
+            Height: =40
+            Text: ="Confirm BPS Cleared" & Char(10) & If(IsBlank(varSelectedRecord.'Confirm BPS Cleared'), "Not done", Text(varSelectedRecord.'Confirm BPS Cleared', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Confirm BPS Cleared'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Confirm BPS Cleared'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIMBPSToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =822
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Confirm BPS Cleared')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Confirm BPS Cleared': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMMODNet:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =818
+            Width: =360
+            Height: =40
+            Text: ="MODNet Account Request" & Char(10) & If(IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub'), "Not done", Text(varSelectedRecord.'MODNet Account Request Submitted to iHub', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIMMODNetToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =822
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MODNet Account Request Submitted to iHub': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMMODNetIssued:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =870
+            Width: =360
+            Height: =40
+            Text: ="MODNet Account Issued" & Char(10) & If(IsBlank(varSelectedRecord.'MODNet Account Issued'), "Not done", Text(varSelectedRecord.'MODNet Account Issued', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MODNet Account Issued'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MODNet Account Issued'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIMMODNetIssuedToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =874
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MODNet Account Issued')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MODNet Account Issued': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMMMLOrMOVDLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =870
+            Width: =200
+            Height: =18
+            Text: ="MML or MOVD?"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+      - drpIMMMLOrMOVD:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            X: =700
+            Y: =888
+            Width: =260
+            Height: =40
+            Items: =["MML", "MOVD", "Both", "Neither"]
+            Default: =If(IsBlank(varSelectedRecord.'MML or MOVD?'), {Value: ""}, {Value: varSelectedRecord.'MML or MOVD?'.Value})
+            OnChange: |-
+              =If(
+                  !IsBlank(Self.Selected.Value),
+                  Patch('Staff Movements (LTD)', varSelectedRecord,
+                      {'MML or MOVD?': {Value: Self.Selected.Value}}
+                  );
+                  Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+                  ClearCollect(colMovements, 'Staff Movements (LTD)')
+              )
+      - lblIMMMLReq:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =922
+            Width: =360
+            Height: =40
+            Text: ="MML Requested via OPBC" & Char(10) & If(IsBlank(varSelectedRecord.'MML Requested via OPBC'), "Not done", Text(varSelectedRecord.'MML Requested via OPBC', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MML Requested via OPBC'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MML Requested via OPBC'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+      - btnIMMMLReqToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =926
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MML Requested via OPBC') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MML Requested via OPBC': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMMMLApproved:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =922
+            Width: =360
+            Height: =40
+            Text: ="MML Approved" & Char(10) & If(IsBlank(varSelectedRecord.'MML Approved'), "Not done", Text(varSelectedRecord.'MML Approved', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MML Approved'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MML Approved'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+      - btnIMMMLApprovedToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =926
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MML Approved') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MML Approved': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMMMLIssued:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =974
+            Width: =360
+            Height: =40
+            Text: ="MML Issued" & Char(10) & If(IsBlank(varSelectedRecord.'MML Issued'), "Not done", Text(varSelectedRecord.'MML Issued', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MML Issued'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MML Issued'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+      - btnIMMMLIssuedToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =978
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MML Issued') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MML Issued': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMMMLStatusLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =974
+            Width: =200
+            Height: =18
+            Text: ="MML Status"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+      - drpIMMMLStatus:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            X: =700
+            Y: =992
+            Width: =260
+            Height: =40
+            Items: =["Not Required", "Requested", "Approved", "Issued", "Active"]
+            Default: =If(IsBlank(varSelectedRecord.'MML Status'), {Value: ""}, {Value: varSelectedRecord.'MML Status'.Value})
+            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+            OnChange: |-
+              =If(
+                  !IsBlank(Self.Selected.Value),
+                  Patch('Staff Movements (LTD)', varSelectedRecord,
+                      {'MML Status': {Value: Self.Selected.Value}}
+                  );
+                  Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+                  ClearCollect(colMovements, 'Staff Movements (LTD)')
+              )
+      - lblIMMOVDReq:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1026
+            Width: =360
+            Height: =40
+            Text: ="MOVD Requested" & Char(10) & If(IsBlank(varSelectedRecord.'MOVD Requested'), "Not done", Text(varSelectedRecord.'MOVD Requested', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MOVD Requested'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MOVD Requested'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+      - btnIMMOVDReqToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =1030
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MOVD Requested') && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MOVD Requested': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMMOVDActive:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =1026
+            Width: =360
+            Height: =40
+            Text: ="MOVD Active" & Char(10) & If(IsBlank(varSelectedRecord.'MOVD Active'), "Not done", Text(varSelectedRecord.'MOVD Active', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MOVD Active'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MOVD Active'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+      - btnIMMOVDActiveToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =1030
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MOVD Active') && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MOVD Active': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMOutlookContacts:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1078
+            Width: =360
+            Height: =40
+            Text: ="Outlook Contact Lists" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), "Not done", Text(varSelectedRecord.'Added/Removed on Outlook contact lists', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIMOutlookContactsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =1082
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Outlook contact lists': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMShareTeams:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =1078
+            Width: =360
+            Height: =40
+            Text: ="Share Army-Cadets MS Teams" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), "Not done", Text(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIMShareTeamsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =1082
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed Share Army-Cadets MS Teams': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMSharingOutlook:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1130
+            Width: =360
+            Height: =40
+            Text: ="Sharing Outlook Contacts" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), "Not done", Text(varSelectedRecord.'Added/Removed Sharing Outlook Contacts', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+      - btnIMSharingOutlookToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =1134
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed Sharing Outlook Contacts': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMUpgradeLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =1130
+            Width: =300
+            Height: =18
+            Text: ="Upgrade M365 License"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+      - tglIMUpgrade:
+          Control: Toggle@1.1.5
+          Properties:
+            X: =700
+            Y: =1150
+            Width: =200
+            Height: =36
+            Label: =If(varSelectedRecord.Upgrade_x0020_M365_x0020_License, "Yes — upgrade needed", "No upgrade needed")
+            Checked: =varSelectedRecord.Upgrade_x0020_M365_x0020_License
+            OnCheck: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {Upgrade_x0020_M365_x0020_License: true}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+            OnUncheck: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {Upgrade_x0020_M365_x0020_License: false}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblIMUpgradeDateLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1182
+            Width: =250
+            Height: =18
+            Text: ="M365 Upgrade Date"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License
+      - dpIMUpgradeDate:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            X: =20
+            Y: =1200
+            Width: =300
+            Height: =40
+            DefaultDate: =varSelectedRecord.'Upgrade M365 License Date'
+            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License
+            OnChange: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Upgrade M365 License Date': Self.SelectedDate}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - recLeaverTasksHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =1252
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(255,237,210,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
+      - lblLeaverTasksHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1252
+            Width: =400
+            Height: =36
+            Text: ="Leaver Tasks"
+            Color: =RGBA(140,70,0,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
+      - lblLeaverMOVDDeact:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1294
+            Width: =360
+            Height: =40
+            Text: ="MOVD Deactivation Requested" & Char(10) & If(IsBlank(varSelectedRecord.'MOVD deactivation requested'), "Not done", Text(varSelectedRecord.'MOVD deactivation requested', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'MOVD deactivation requested'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'MOVD deactivation requested'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
+      - btnLeaverMOVDDeactToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =1298
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'MOVD deactivation requested') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'MOVD deactivation requested': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblLeaverWestminster:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =1294
+            Width: =360
+            Height: =40
+            Text: ="Westminster Team Informed" & Char(10) & If(IsBlank(varSelectedRecord.'Westminster team informed'), "Not done", Text(varSelectedRecord.'Westminster team informed', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Westminster team informed'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Westminster team informed'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
+      - btnLeaverWestminsterToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =1298
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'Westminster team informed') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Westminster team informed': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblLeaverVDS:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1346
+            Width: =360
+            Height: =40
+            Text: ="VDS Account Requested" & Char(10) & If(IsBlank(varSelectedRecord.'VDS Account Requested'), "Not done", Text(varSelectedRecord.'VDS Account Requested', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'VDS Account Requested'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'VDS Account Requested'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
+      - btnLeaverVDSToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =1350
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =IsBlank(varSelectedRecord.'VDS Account Requested') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'VDS Account Requested': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - recNotesHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =1400
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(230,237,235,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - lblNotesHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =1400
+            Width: =400
+            Height: =36
+            Text: ="Notes"
+            Color: =RGBA(0,78,66,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+      - txtNotes:
+          Control: ModernTextInput@1.1.0
+          Properties:
+            X: =20
+            Y: =1444
+            Width: =1326
+            Height: =140
+            Default: =varSelectedRecord.Notes
+            Placeholder: ="Add notes here..."
+            Type: =TextInputType.Multiline
+            OnChange: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord, {Notes: Self.Text});
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID))
+      - recEditPanelOverlay:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =0
+            Width: =1366
+            Height: =1600
+            Fill: =RGBA(0,0,0,0.45)
+            HoverFill: =RGBA(0,0,0,0.45)
+            PressedFill: =RGBA(0,0,0,0.45)
+            DisabledFill: =RGBA(0,0,0,0.45)
+            BorderThickness: =0
+            Text: =""
+            Visible: =varShowEditPanel
+            OnSelect: =Set(varShowEditPanel, false)
+      - recEditPanel:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =283
+            Y: =60
+            Width: =800
+            Height: =580
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            DisplayMode: =DisplayMode.View
+            Text: =""
+            Visible: =varShowEditPanel
+      - lblEditPanelTitle:
+          Control: Label@2.5.1
+          Properties:
+            X: =303
+            Y: =76
+            Width: =700
+            Height: =36
+            Text: ="Edit Details"
+            Color: =RGBA(24,24,24,1)
+            Size: =16
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+            Visible: =varShowEditPanel
+      - lblEditTitleLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =303
+            Y: =118
+            Width: =360
+            Height: =18
+            Text: ="Rank/Title and Full Name *"
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowEditPanel
+      - recErrEditTitle:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =303
+            Y: =136
+            Width: =360
+            Height: =40
+            Fill: =RGBA(0,0,0,0)
+            DisabledFill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,0,0,0)
+            PressedFill: =RGBA(0,0,0,0)
+            BorderColor: =If(varErrEditTitle, RGBA(163,45,45,1), RGBA(0,0,0,0))
+            BorderThickness: =If(varErrEditTitle, 2, 0)
+            RadiusTopLeft: =6
+            RadiusTopRight: =6
+            RadiusBottomLeft: =6
+            RadiusBottomRight: =6
+            DisplayMode: =DisplayMode.View
+            Text: =""
+            Visible: =varShowEditPanel
+      - txtEditTitle:
+          Control: ModernTextInput@1.1.0
+          Properties:
+            X: =303
+            Y: =136
+            Width: =360
+            Height: =40
+            Default: =varSelectedRecord.Title
+            Placeholder: ="Full name and rank/title"
+            Visible: =varShowEditPanel
+      - lblEditMovTypeLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =703
+            Y: =118
+            Width: =360
+            Height: =18
+            Text: ="Movement Type *"
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowEditPanel
+      - drpEditMovType:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            X: =703
+            Y: =136
+            Width: =360
+            Height: =40
+            Items: =["New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD"]
+            Default: =If(IsBlank(varSelectedRecord.'Movement Type'), {Value: ""}, {Value: varSelectedRecord.'Movement Type'.Value})
+            Visible: =varShowEditPanel
+      - lblEditPosTypeLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =303
+            Y: =192
+            Width: =360
+            Height: =18
+            Text: ="Position Type"
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowEditPanel
+      - drpEditPosType:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            X: =303
+            Y: =210
+            Width: =360
+            Height: =40
+            Items: =["Officer", "Other Rank (OR)", "Civilian", "Contractor"]
+            Default: =If(IsBlank(varSelectedRecord.'Position Type'), {Value: ""}, {Value: varSelectedRecord.'Position Type'.Value})
+            Visible: =varShowEditPanel
+      - lblEditStaffNoLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =703
+            Y: =192
+            Width: =360
+            Height: =18
+            Text: ="Staff/Service No or PUID"
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowEditPanel
+      - txtEditStaffNo:
+          Control: ModernTextInput@1.1.0
+          Properties:
+            X: =703
+            Y: =210
+            Width: =360
+            Height: =40
+            Default: =varSelectedRecord.Staff_x002f_ServiceNo
+            Placeholder: ="Staff or service number"
+            Visible: =varShowEditPanel
+      - lblEditRoleLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =303
+            Y: =266
+            Width: =360
+            Height: =18
+            Text: ="Desired Role Name"
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowEditPanel
+      - txtEditRole:
+          Control: ModernTextInput@1.1.0
+          Properties:
+            X: =303
+            Y: =284
+            Width: =360
+            Height: =40
+            Default: =varSelectedRecord.'Desired Role Name'
+            Placeholder: ="Desired role or post name"
+            Visible: =varShowEditPanel
+      - lblEditMMLOrMOVDLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =703
+            Y: =266
+            Width: =360
+            Height: =18
+            Text: ="MML or MOVD?"
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowEditPanel
+      - drpEditMMLOrMOVD:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            X: =703
+            Y: =284
+            Width: =360
+            Height: =40
+            Items: =["MML", "MOVD", "Both", "Neither"]
+            Default: =If(IsBlank(varSelectedRecord.'MML or MOVD?'), {Value: ""}, {Value: varSelectedRecord.'MML or MOVD?'.Value})
+            Visible: =varShowEditPanel
+      - lblEditErrMsg:
+          Control: Label@2.5.1
+          Properties:
+            X: =303
+            Y: =340
+            Width: =760
+            Height: =24
+            Text: ="Name and Movement Type are required."
+            Color: =RGBA(163,45,45,1)
+            Size: =12
+            Visible: =(varShowEditPanel && (varErrEditTitle || varErrEditMovType))
+      - btnEditSave:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =703
+            Y: =574
+            Width: =160
+            Height: =40
+            Text: ="Save Changes"
+            BasePaletteColor: =RGBA(0,78,66,1)
+            Visible: =varShowEditPanel
+            OnSelect: |-
+              =Set(varErrEditTitle, IsBlank(Trim(txtEditTitle.Text)));
+              Set(varErrEditMovType, IsBlank(drpEditMovType.Selected.Value));
+              If(
+                  varErrEditTitle || varErrEditMovType,
+                  false,
+                  Patch('Staff Movements (LTD)', varSelectedRecord,
+                      {
+                          Title: Trim(txtEditTitle.Text),
+                          'Movement Type': {Value: drpEditMovType.Selected.Value},
+                          'Position Type': {Value: drpEditPosType.Selected.Value},
+                          Staff_x002f_ServiceNo: Trim(txtEditStaffNo.Text),
+                          'Desired Role Name': Trim(txtEditRole.Text),
+                          'MML or MOVD?': {Value: drpEditMMLOrMOVD.Selected.Value}
+                      }
+                  );
+                  Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+                  ClearCollect(colMovements, 'Staff Movements (LTD)');
+                  Set(varShowEditPanel, false);
+                  Set(varErrEditTitle, false);
+                  Set(varErrEditMovType, false);
+                  Notify("Record updated.", NotificationType.Success)
+              )
+      - btnEditCancel:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =559
+            Y: =574
+            Width: =130
+            Height: =40
+            Text: ="Cancel"
+            BasePaletteColor: =RGBA(120,120,120,1)
+            Visible: =varShowEditPanel
+            OnSelect: |-
+              =Set(varShowEditPanel, false);
+              Set(varErrEditTitle, false);
+              Set(varErrEditMovType, false)
+      - recLeaverPanelOverlay:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =0
+            Width: =1366
+            Height: =1600
+            Fill: =RGBA(0,0,0,0.45)
+            HoverFill: =RGBA(0,0,0,0.45)
+            PressedFill: =RGBA(0,0,0,0.45)
+            DisabledFill: =RGBA(0,0,0,0.45)
+            BorderThickness: =0
+            Text: =""
+            Visible: =varShowLeaverPanel
+            OnSelect: =Set(varShowLeaverPanel, false)
+      - recLeaverPanel:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =383
+            Y: =120
+            Width: =600
+            Height: =360
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            DisplayMode: =DisplayMode.View
+            Text: =""
+            Visible: =varShowLeaverPanel
+      - lblLeaverPanelTitle:
+          Control: Label@2.5.1
+          Properties:
+            X: =403
+            Y: =136
+            Width: =560
+            Height: =36
+            Text: ="Start Leaver Process"
+            Color: =RGBA(24,24,24,1)
+            Size: =16
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+            Visible: =varShowLeaverPanel
+      - lblLeaverPanelInfo:
+          Control: Label@2.5.1
+          Properties:
+            X: =403
+            Y: =176
+            Width: =560
+            Height: =40
+            Text: ="This will update the movement type to 'Leaving Branch'. Set the confirmed leaving date below."
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowLeaverPanel
+      - lblLeaverPanelDateLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =403
+            Y: =226
+            Width: =300
+            Height: =18
+            Text: ="Confirmed Leaving Date"
+            Color: =RGBA(80,80,80,1)
+            Size: =12
+            Visible: =varShowLeaverPanel
+      - dpLeaverPanelDate:
+          Control: Classic/DatePicker@2.6.0
+          Properties:
+            X: =403
+            Y: =244
+            Width: =300
+            Height: =40
+            DefaultDate: =If(IsBlank(varSelectedRecord.'Confirmed Leaving Date'), Today(), varSelectedRecord.'Confirmed Leaving Date')
+            Visible: =varShowLeaverPanel
+      - btnLeaverPanelSave:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =763
+            Y: =418
+            Width: =160
+            Height: =40
+            Text: ="Confirm Leaver"
+            BasePaletteColor: =RGBA(163,100,0,1)
+            Visible: =varShowLeaverPanel
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {
+                  'Movement Type': {Value: "Leaving Branch"},
+                  'Confirmed Leaving Date': dpLeaverPanelDate.SelectedDate
+                  }
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)');
+              Set(varShowLeaverPanel, false);
+              Notify("Leaver process started.", NotificationType.Success)
+      - btnLeaverPanelCancel:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =619
+            Y: =418
+            Width: =130
+            Height: =40
+            Text: ="Cancel"
+            BasePaletteColor: =RGBA(120,120,120,1)
+            Visible: =varShowLeaverPanel
+            OnSelect: =Set(varShowLeaverPanel, false)
