@@ -1,4 +1,5 @@
-- scrAdd:
+Screens:
+  scrAdd:
     Control: Screen
     Properties:
       Fill: =RGBA(248,248,248,1)
@@ -141,7 +142,7 @@
             Width: =540
             Height: =44
             Items: =["New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD"]
-            Default: ={Value: "New to MoD/Branch"}
+            Default: '={Value: "New to MoD/Branch"}'
       - lblAddPosTypeLabel:
           Control: Label@2.5.1
           Properties:
@@ -160,7 +161,7 @@
             Width: =500
             Height: =44
             Items: =["Officer", "Other Rank (OR)", "Civilian", "Contractor"]
-            Default: ={Value: ""}
+            Default: '={Value: ""}'
       - lblAddStaffNoLabel:
           Control: Label@2.5.1
           Properties:

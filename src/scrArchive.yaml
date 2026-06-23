@@ -1,4 +1,5 @@
-- scrArchive:
+Screens:
+  scrArchive:
     Control: Screen
     Properties:
       Fill: =RGBA(248,248,248,1)

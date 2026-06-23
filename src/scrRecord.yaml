@@ -1,4 +1,5 @@
-- scrRecord:
+Screens:
+  scrRecord:
     Control: Screen
     Properties:
       Fill: =RGBA(248,248,248,1)
@@ -223,7 +224,7 @@
             Y: =224
             Width: =500
             Height: =24
-            Text: =If(IsBlank(varSelectedRecord.'Desired Role Name'), "Role not set", "Role: " & varSelectedRecord.'Desired Role Name')
+            Text: '=If(IsBlank(varSelectedRecord.''Desired Role Name''), "Role not set", "Role: " & varSelectedRecord.''Desired Role Name'')'
             Color: =RGBA(100,100,100,1)
             Size: =13
       - lblCoreStaffNo:
@@ -233,7 +234,7 @@
             Y: =152
             Width: =440
             Height: =24
-            Text: =If(IsBlank(varSelectedRecord.Staff_x002f_ServiceNo), "No staff number", "Staff No: " & varSelectedRecord.Staff_x002f_ServiceNo)
+            Text: '=If(IsBlank(varSelectedRecord.Staff_x002f_ServiceNo), "No staff number", "Staff No: " & varSelectedRecord.Staff_x002f_ServiceNo)'
             Color: =RGBA(100,100,100,1)
             Size: =13
             Align: =Align.Right
@@ -494,7 +495,7 @@
             Width: =300
             Height: =40
             Items: =["Added", "Removed", "N/A"]
-            Default: =If(IsBlank(varSelectedRecord.'Added/Removed ACOS Execs Invites'), {Value: ""}, {Value: varSelectedRecord.'Added/Removed ACOS Execs Invites'.Value})
+            Default: '=If(IsBlank(varSelectedRecord.''Added/Removed ACOS Execs Invites''), {Value: ""}, {Value: varSelectedRecord.''Added/Removed ACOS Execs Invites''.Value})'
             OnChange: |-
               =If(
                   !IsBlank(Self.Selected.Value),
@@ -772,7 +773,7 @@
             Width: =260
             Height: =40
             Items: =["MML", "MOVD", "Both", "Neither"]
-            Default: =If(IsBlank(varSelectedRecord.'MML or MOVD?'), {Value: ""}, {Value: varSelectedRecord.'MML or MOVD?'.Value})
+            Default: '=If(IsBlank(varSelectedRecord.''MML or MOVD?''), {Value: ""}, {Value: varSelectedRecord.''MML or MOVD?''.Value})'
             OnChange: |-
               =If(
                   !IsBlank(Self.Selected.Value),
@@ -903,7 +904,7 @@
             Width: =260
             Height: =40
             Items: =["Not Required", "Requested", "Approved", "Issued", "Active"]
-            Default: =If(IsBlank(varSelectedRecord.'MML Status'), {Value: ""}, {Value: varSelectedRecord.'MML Status'.Value})
+            Default: '=If(IsBlank(varSelectedRecord.''MML Status''), {Value: ""}, {Value: varSelectedRecord.''MML Status''.Value})'
             Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
             OnChange: |-
               =If(
@@ -1414,7 +1415,7 @@
             Width: =360
             Height: =40
             Items: =["New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD"]
-            Default: =If(IsBlank(varSelectedRecord.'Movement Type'), {Value: ""}, {Value: varSelectedRecord.'Movement Type'.Value})
+            Default: '=If(IsBlank(varSelectedRecord.''Movement Type''), {Value: ""}, {Value: varSelectedRecord.''Movement Type''.Value})'
             Visible: =varShowEditPanel
       - lblEditPosTypeLabel:
           Control: Label@2.5.1
@@ -1435,7 +1436,7 @@
             Width: =360
             Height: =40
             Items: =["Officer", "Other Rank (OR)", "Civilian", "Contractor"]
-            Default: =If(IsBlank(varSelectedRecord.'Position Type'), {Value: ""}, {Value: varSelectedRecord.'Position Type'.Value})
+            Default: '=If(IsBlank(varSelectedRecord.''Position Type''), {Value: ""}, {Value: varSelectedRecord.''Position Type''.Value})'
             Visible: =varShowEditPanel
       - lblEditStaffNoLabel:
           Control: Label@2.5.1
@@ -1498,7 +1499,7 @@
             Width: =360
             Height: =40
             Items: =["MML", "MOVD", "Both", "Neither"]
-            Default: =If(IsBlank(varSelectedRecord.'MML or MOVD?'), {Value: ""}, {Value: varSelectedRecord.'MML or MOVD?'.Value})
+            Default: '=If(IsBlank(varSelectedRecord.''MML or MOVD?''), {Value: ""}, {Value: varSelectedRecord.''MML or MOVD?''.Value})'
             Visible: =varShowEditPanel
       - lblEditErrMsg:
           Control: Label@2.5.1
