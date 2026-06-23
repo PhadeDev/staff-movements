@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Movements — PowerApps</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f0f1a;
+      color: #e8e8f0;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    h1 { font-size: 1.8rem; font-weight: 600; color: #c8b8ff; margin-bottom: 8px; }
+    .subtitle { color: #888; font-size: 0.95rem; margin-bottom: 40px; }
+    h2 { font-size: 1.2rem; color: #a0c0e0; margin: 40px 0 16px; border-bottom: 1px solid #2a2a3a; padding-bottom: 8px; }
+    h3 { font-size: 1rem; color: #e8e8f0; margin: 24px 0 8px; }
+    p { color: #aaa; line-height: 1.6; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 24px; }
+    th { background: #1a1a2e; color: #c8b8ff; text-align: left; padding: 8px 12px; border: 1px solid #2a2a3a; }
+    td { padding: 8px 12px; border: 1px solid #2a2a3a; color: #d0d0e0; vertical-align: top; }
+    tr:nth-child(even) td { background: #131320; }
+    code { background: #1e1e30; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; color: #c8d8f0; font-family: 'Cascadia Code', 'Consolas', monospace; }
+    .code-block { position: relative; margin: 12px 0 24px; }
+    pre {
+      background: #1a1a2e;
+      color: #c8d8f0;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.82rem;
+      line-height: 1.55;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      padding: 4px 12px;
+      background: #7c4dff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.78rem;
+      transition: background 0.15s;
+    }
+    .copy-btn:hover { background: #6a3de8; }
+    .copy-btn.ok { background: #2a7d4e; }
+    .screen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
+    .screen-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #1a1a2e;
+      border: 1px solid #2a2a3a;
+      border-radius: 12px;
+      padding: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .screen-card:hover { border-color: #7c4dff; background: #1e1e35; }
+    .screen-number { font-size: 0.75rem; color: #666; margin-bottom: 8px; }
+    .screen-name { font-size: 1rem; font-weight: 600; color: #c8b8ff; margin-bottom: 6px; }
+    .screen-desc { font-size: 0.82rem; color: #888; line-height: 1.4; }
+    .screen-cta { margin-top: 16px; font-size: 0.82rem; color: #7c4dff; }
+    .note { background: #1a2a1a; border-left: 3px solid #2a7d4e; padding: 12px 16px; border-radius: 4px; font-size: 0.85rem; color: #aaa; margin: 16px 0; }
+    .warning { background: #2a1a1a; border-left: 3px solid #7d2a2a; padding: 12px 16px; border-radius: 4px; font-size: 0.85rem; color: #aaa; margin: 16px 0; }
+    ol, ul { padding-left: 24px; color: #aaa; font-size: 0.9rem; line-height: 2; }
+    a.back { font-size: 0.82rem; color: #666; text-decoration: none; display: inline-block; margin-bottom: 32px; }
+    a.back:hover { color: #999; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; margin-left: 6px; }
+    .badge-new { background: #1a3a1a; color: #4a9; }
+    .badge-existing { background: #1a1a3a; color: #66a; }
+  </style>
+</head>
+<body>
+
+<a class="back" href="https://phaderon.github.io/PowerApps/">&#8592; Guide Library</a>
+<h1>Staff Movements</h1>
+<p class="subtitle">Canvas app — tracks staff joining and leaving the branch. Four tab views (All / Admin / IX / IM), per-duty Set Today buttons, and a leaver lifecycle workflow. Wraps the existing <code>Staff Movements</code> SharePoint list.</p>
+
+<h2>Before You Start</h2>
+<ol>
+  <li>Add the one new column to the existing SharePoint list (see below).</li>
+  <li>Open Power Apps Studio &rarr; New blank canvas app (tablet landscape, 1366&times;768).</li>
+  <li>Add the data connection listed below.</li>
+  <li>Set <strong>App &rarr; OnStart</strong> using the code block below.</li>
+  <li>Create 4 blank screens, then paste each YAML in order.</li>
+</ol>
+
+<h2>Data Connection</h2>
+<p>Add this in the Data panel before pasting any YAML:</p>
+<ul>
+  <li><strong>SharePoint</strong> &rarr; connect to your SharePoint site &rarr; select <code>Staff Movements</code></li>
+</ul>
+
+<h2>SharePoint List Changes</h2>
+<p>The existing <code>Staff Movements</code> list is used as-is. One new column must be added:</p>
+
+<h3>List: <code>Staff Movements</code> <span class="badge badge-existing">existing</span></h3>
+<div class="note">This list already exists. Do not recreate it. Only add the one new column below.</div>
+<table>
+  <thead><tr><th>Column name</th><th>Type</th><th>Notes</th></tr></thead>
+  <tbody>
+    <tr><td><code>DateCompleted</code></td><td>Date and Time (Date Only)</td><td><span class="badge badge-new">ADD THIS</span> No space in name. Not Required. Used to calculate the 7-day archive window.</td></tr>
+    <tr><td>All other columns</td><td>—</td><td>Leave as-is. The app uses internal column names directly from the schema.</td></tr>
+  </tbody>
+</table>
+
+<div class="warning">
+  <strong>Column name gotchas:</strong> Some columns have URL-encoded internal names due to special characters in the original names.
+  The app uses these internal names exactly as they appear in SharePoint:
+  <ul style="margin-top:8px;">
+    <li><code>Add_x0020_to_x0020_ACOS_x0020_Ex</code> — displays as "Added/Removed Branch Execs Invites"</li>
+    <li><code>Upgrade_x0020_M365_x0020_License</code> — displays as "Upgrade M365 License"</li>
+    <li><code>What_0Mailboxes</code> — displays as "What 0Mailboxes are required?"</li>
+    <li><code>Staff_x002f_ServiceNo</code> — displays as "Staff/Service No or PUID"</li>
+  </ul>
+  If any of these Patch calls fail with a field-not-found error, check the actual internal name in the SharePoint list settings and update the formula.
+</div>
+
+<h2>App.OnStart</h2>
+<p>Paste into <strong>App &rarr; OnStart</strong> in Power Apps Studio. Do not put this inside any screen.</p>
+<div class="code-block">
+  <button class="copy-btn" onclick="copyBlock(this, 'on-start')">Copy</button>
+  <pre id="on-start">// Staff Movements — App.OnStart
+// ─────────────────────────────────────────────────────────────
+// TAB EMAIL MAPPINGS  (edit these two strings to reassign tabs)
+//   IX    = Allan Hamilton  (allan.hamilton775@mod.gov.uk)
+//   IM    = Dan Smith       (dan.smith391@mod.gov.uk)
+//   Admin = everyone else
+//   Admin email placeholder — replace "admin.placeholder@mod.gov.uk" with real address when known
+// ─────────────────────────────────────────────────────────────
+Set(varMyEmail, Lower(User().Email));
+Set(
+    varTab,
+    Switch(
+        varMyEmail,
+        "allan.hamilton775@mod.gov.uk", "IX",
+        "dan.smith391@mod.gov.uk",      "IM",
+        "Admin"
+    )
+);
+Set(varSelectedRecord, Blank());
+Set(varShowEditPanel, false);
+Set(varShowLeaverPanel, false);
+Set(varErrEditTitle, false);
+Set(varErrEditMovType, false);
+Set(varErrAddTitle, false);
+Set(varErrAddMovType, false);
+ClearCollect(colMovements, 'Staff Movements')</pre>
+</div>
+
+<h2>Screens</h2>
+<p>Create a new blank screen for each one, then paste in this order. Each screen imports as a complete unit.</p>
+<div class="screen-grid">
+  <a class="screen-card" href="screens/scrDashboard.html">
+    <div>
+      <div class="screen-number">Screen 1</div>
+      <div class="screen-name">scrDashboard</div>
+      <div class="screen-desc">Landing page. Four tab buttons (All / Admin / IX / IM) with auto-detection. Movement list with outstanding duty counts per tab. Search and Add New.</div>
+    </div>
+    <div class="screen-cta">Open and copy &rarr;</div>
+  </a>
+  <a class="screen-card" href="screens/scrRecord.html">
+    <div>
+      <div class="screen-number">Screen 2</div>
+      <div class="screen-name">scrRecord</div>
+      <div class="screen-desc">Full record view. Set Today buttons for all duty date fields. Conditional MML/MOVD/upgrade sections. Edit Details panel, Mark Complete, Leaver Process panel.</div>
+    </div>
+    <div class="screen-cta">Open and copy &rarr;</div>
+  </a>
+  <a class="screen-card" href="screens/scrAdd.html">
+    <div>
+      <div class="screen-number">Screen 3</div>
+      <div class="screen-name">scrAdd</div>
+      <div class="screen-desc">Add a new movement record. Name, movement type, position, staff number, role, start date, notes. Validates required fields before saving.</div>
+    </div>
+    <div class="screen-cta">Open and copy &rarr;</div>
+  </a>
+  <a class="screen-card" href="screens/scrArchive.html">
+    <div>
+      <div class="screen-number">Screen 4</div>
+      <div class="screen-name">scrArchive</div>
+      <div class="screen-desc">Read-only archive of records marked complete more than 7 days ago. Tap a row to view the full record.</div>
+    </div>
+    <div class="screen-cta">Open and copy &rarr;</div>
+  </a>
+</div>
+
+<h2>Paste Order</h2>
+<ol>
+  <li>Create 4 blank screens in Power Apps (they can be named anything — the YAML renames them on paste).</li>
+  <li>Click the first blank screen, open the three-dot menu, choose <strong>Paste YAML</strong>.</li>
+  <li>Repeat for each screen in order: Dashboard, Record, Add, Archive.</li>
+  <li>Set the startup screen to <code>scrDashboard</code> in App &rarr; StartScreen.</li>
+</ol>
+
+<div class="note">
+  <strong>Tab auto-detection:</strong> The app auto-selects the IX or IM tab based on the logged-in user's email. To change mappings, edit the two email strings in App.OnStart. To add a third named user, add another line to the Switch statement.
+</div>
+
+<div class="note">
+  <strong>Movement Type options in the app:</strong> "New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD". If your SharePoint list has different Choice option strings, update the dropdown Items lists in scrAdd and scrRecord to match exactly.
+</div>
+
+<h2>Issues</h2>
+<p>Found a problem or need a change? <a href="https://github.com/PhadeDev/staff-movements/issues" style="color:#7c4dff">Report it in the issues tracker</a>.</p>
+
+<script>
+async function copyBlock(btn, id) {
+  const text = document.getElementById(id).textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = '✓ Copied!';
+    btn.className = 'copy-btn ok';
+    setTimeout(() => { btn.textContent = 'Copy'; btn.className = 'copy-btn'; }, 3000);
+  } catch (e) {
+    btn.textContent = 'Failed';
+  }
+}
+</script>
+</body>
+</html>
