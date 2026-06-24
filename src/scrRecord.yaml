@@ -107,7 +107,11 @@ Screens:
             Height: =36
             Text: ="Edit Details"
             BasePaletteColor: =RGBA(80,80,80,1)
-            OnSelect: =Set(varShowEditPanel, true)
+            OnSelect: |-
+              =Set(varShowEditPanel, true);
+              Reset(drpEditMovType);
+              Reset(drpEditPosType);
+              Reset(drpEditMMLOrMOVD)
       - btnMarkComplete:
           Control: ModernButton@1.0.0
           Properties:
