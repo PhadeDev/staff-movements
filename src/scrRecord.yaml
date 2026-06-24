@@ -1094,17 +1094,17 @@ Screens:
             Y: =1150
             Width: =200
             Height: =36
-            Label: =If(varSelectedRecord.Upgrade_x0020_M365_x0020_License = true, "Yes — upgrade needed", "No upgrade needed")
-            Checked: =varSelectedRecord.Upgrade_x0020_M365_x0020_License = true
+            Label: =If(varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes", "Yes — upgrade needed", "No upgrade needed")
+            Checked: =varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes"
             OnCheck: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {Upgrade_x0020_M365_x0020_License: true}
+                  {Upgrade_x0020_M365_x0020_License: {Value: "Yes"}}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
             OnUncheck: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {Upgrade_x0020_M365_x0020_License: false}
+                  {Upgrade_x0020_M365_x0020_License: {Value: "No"}}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
@@ -1118,7 +1118,7 @@ Screens:
             Text: ="M365 Upgrade Date"
             Color: =RGBA(100,100,100,1)
             Size: =11
-            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License = true
+            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes"
       - dpIMUpgradeDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
@@ -1127,7 +1127,7 @@ Screens:
             Width: =300
             Height: =40
             DefaultDate: =varSelectedRecord.'Upgrade M365 License Date'
-            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License = true
+            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes"
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'Upgrade M365 License Date': Self.SelectedDate}
