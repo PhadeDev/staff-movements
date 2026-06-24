@@ -1297,7 +1297,7 @@ Screens:
             Y: =1444
             Width: =1326
             Height: =140
-            Default: =varSelectedRecord.Notes
+            Default: =PlainText(varSelectedRecord.Notes)
             Placeholder: ="Add notes here..."
             Type: =TextInputType.Multiline
             OnChange: |-
