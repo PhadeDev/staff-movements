@@ -1094,8 +1094,8 @@ Screens:
             Y: =1150
             Width: =200
             Height: =36
-            Label: =If(varSelectedRecord.Upgrade_x0020_M365_x0020_License, "Yes — upgrade needed", "No upgrade needed")
-            Checked: =varSelectedRecord.Upgrade_x0020_M365_x0020_License
+            Label: =If(varSelectedRecord.Upgrade_x0020_M365_x0020_License = true, "Yes — upgrade needed", "No upgrade needed")
+            Checked: =varSelectedRecord.Upgrade_x0020_M365_x0020_License = true
             OnCheck: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {Upgrade_x0020_M365_x0020_License: true}
@@ -1118,7 +1118,7 @@ Screens:
             Text: ="M365 Upgrade Date"
             Color: =RGBA(100,100,100,1)
             Size: =11
-            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License
+            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License = true
       - dpIMUpgradeDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
@@ -1127,7 +1127,7 @@ Screens:
             Width: =300
             Height: =40
             DefaultDate: =varSelectedRecord.'Upgrade M365 License Date'
-            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License
+            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License = true
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'Upgrade M365 License Date': Self.SelectedDate}
