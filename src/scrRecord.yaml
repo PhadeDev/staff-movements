@@ -490,6 +490,7 @@ Screens:
             Width: =300
             Height: =40
             Items: =["Added", "Removed", "N/A"]
+            ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''Added/Removed ACOS Execs Invites''.Value, "")}, {Value: _v})'
             OnChange: |-
               =If(
@@ -768,6 +769,7 @@ Screens:
             Width: =260
             Height: =40
             Items: =["MML", "MOVD", "Both", "Neither"]
+            ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''MML or MOVD?''.Value, "")}, {Value: _v})'
             OnChange: |-
               =If(
@@ -899,6 +901,7 @@ Screens:
             Width: =260
             Height: =40
             Items: =["Not Required", "Requested", "Approved", "Issued", "Active"]
+            ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''MML Status''.Value, "")}, {Value: _v})'
             Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
             OnChange: |-
@@ -1410,6 +1413,7 @@ Screens:
             Width: =360
             Height: =40
             Items: =["New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD"]
+            ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''Movement Type''.Value, "")}, {Value: _v})'
             Visible: =varShowEditPanel
       - lblEditPosTypeLabel:
@@ -1431,6 +1435,7 @@ Screens:
             Width: =360
             Height: =40
             Items: =["Officer", "Other Rank (OR)", "Civilian", "Contractor"]
+            ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''Position Type''.Value, "")}, {Value: _v})'
             Visible: =varShowEditPanel
       - lblEditStaffNoLabel:
@@ -1494,6 +1499,7 @@ Screens:
             Width: =360
             Height: =40
             Items: =["MML", "MOVD", "Both", "Neither"]
+            ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''MML or MOVD?''.Value, "")}, {Value: _v})'
             Visible: =varShowEditPanel
       - lblEditErrMsg:

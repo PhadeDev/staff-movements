@@ -141,6 +141,7 @@ Screens:
             Width: =540
             Height: =44
             Items: =["New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD"]
+            ItemDisplayText: =ThisItem.Value
             Default: '={Value: "New to MoD/Branch"}'
       - lblAddPosTypeLabel:
           Control: Label@2.5.1
@@ -160,6 +161,7 @@ Screens:
             Width: =500
             Height: =44
             Items: =["Officer", "Other Rank (OR)", "Civilian", "Contractor"]
+            ItemDisplayText: =ThisItem.Value
             Default: '={Value: ""}'
       - lblAddStaffNoLabel:
           Control: Label@2.5.1
