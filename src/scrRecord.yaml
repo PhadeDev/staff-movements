@@ -490,7 +490,7 @@ Screens:
             Width: =300
             Height: =40
             Items: =["Added", "Removed", "N/A"]
-            Default: '=If(IsBlank(varSelectedRecord.''Added/Removed ACOS Execs Invites''), {Value: ""}, {Value: varSelectedRecord.''Added/Removed ACOS Execs Invites''.Value})'
+            Default: '=With({_v: Coalesce(varSelectedRecord.''Added/Removed ACOS Execs Invites''.Value, "")}, {Value: _v})'
             OnChange: |-
               =If(
                   !IsBlank(Self.Selected.Value),
@@ -768,7 +768,7 @@ Screens:
             Width: =260
             Height: =40
             Items: =["MML", "MOVD", "Both", "Neither"]
-            Default: '=If(IsBlank(varSelectedRecord.''MML or MOVD?''), {Value: ""}, {Value: varSelectedRecord.''MML or MOVD?''.Value})'
+            Default: '=With({_v: Coalesce(varSelectedRecord.''MML or MOVD?''.Value, "")}, {Value: _v})'
             OnChange: |-
               =If(
                   !IsBlank(Self.Selected.Value),
@@ -899,7 +899,7 @@ Screens:
             Width: =260
             Height: =40
             Items: =["Not Required", "Requested", "Approved", "Issued", "Active"]
-            Default: '=If(IsBlank(varSelectedRecord.''MML Status''), {Value: ""}, {Value: varSelectedRecord.''MML Status''.Value})'
+            Default: '=With({_v: Coalesce(varSelectedRecord.''MML Status''.Value, "")}, {Value: _v})'
             Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
             OnChange: |-
               =If(
@@ -1410,7 +1410,7 @@ Screens:
             Width: =360
             Height: =40
             Items: =["New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD"]
-            Default: '=If(IsBlank(varSelectedRecord.''Movement Type''), {Value: ""}, {Value: varSelectedRecord.''Movement Type''.Value})'
+            Default: '=With({_v: Coalesce(varSelectedRecord.''Movement Type''.Value, "")}, {Value: _v})'
             Visible: =varShowEditPanel
       - lblEditPosTypeLabel:
           Control: Label@2.5.1
@@ -1431,7 +1431,7 @@ Screens:
             Width: =360
             Height: =40
             Items: =["Officer", "Other Rank (OR)", "Civilian", "Contractor"]
-            Default: '=If(IsBlank(varSelectedRecord.''Position Type''), {Value: ""}, {Value: varSelectedRecord.''Position Type''.Value})'
+            Default: '=With({_v: Coalesce(varSelectedRecord.''Position Type''.Value, "")}, {Value: _v})'
             Visible: =varShowEditPanel
       - lblEditStaffNoLabel:
           Control: Label@2.5.1
@@ -1494,7 +1494,7 @@ Screens:
             Width: =360
             Height: =40
             Items: =["MML", "MOVD", "Both", "Neither"]
-            Default: '=If(IsBlank(varSelectedRecord.''MML or MOVD?''), {Value: ""}, {Value: varSelectedRecord.''MML or MOVD?''.Value})'
+            Default: '=With({_v: Coalesce(varSelectedRecord.''MML or MOVD?''.Value, "")}, {Value: _v})'
             Visible: =varShowEditPanel
       - lblEditErrMsg:
           Control: Label@2.5.1
