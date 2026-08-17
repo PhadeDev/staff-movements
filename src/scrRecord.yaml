@@ -4,7 +4,8 @@ Screens:
       Fill: =RGBA(248,248,248,1)
       OnVisible: |-
         =Set(varShowEditPanel, false);
-        Set(varShowLeaverPanel, false)
+        Set(varShowLeaverPanel, false);
+        Set(varWizardStage, "core")
     Children:
       - recHeader:
           Control: Classic/Button@2.2.0
@@ -157,11 +158,107 @@ Screens:
             BasePaletteColor: =RGBA(163,100,0,1)
             Visible: =!(varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
             OnSelect: =Set(varShowLeaverPanel, true)
+
+      - recStageTabs:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =108
+            Width: =1366
+            Height: =64
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - btnStageCore:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =12
+            Y: =120
+            Width: =438
+            Height: =40
+            Text: ="1  ·  Core Details"
+            Color: =If(varWizardStage = "core", RGBA(255,255,255,1), RGBA(90,98,88,1))
+            Fill: =If(varWizardStage = "core", RGBA(0,78,66,1), RGBA(240,241,233,1))
+            HoverFill: =If(varWizardStage = "core", RGBA(0,78,66,1), RGBA(228,231,217,1))
+            PressedFill: =RGBA(0,60,50,1)
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =6
+            RadiusTopRight: =6
+            RadiusBottomLeft: =6
+            RadiusBottomRight: =6
+            Size: =13
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Set(varWizardStage, "core")
+      - btnStageAccess:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =464
+            Y: =120
+            Width: =438
+            Height: =40
+            Text: ="2  ·  Access & Accounts"
+            Color: =If(varWizardStage = "access", RGBA(255,255,255,1), RGBA(90,98,88,1))
+            Fill: =If(varWizardStage = "access", RGBA(0,78,66,1), RGBA(240,241,233,1))
+            HoverFill: =If(varWizardStage = "access", RGBA(0,78,66,1), RGBA(228,231,217,1))
+            PressedFill: =RGBA(0,60,50,1)
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =6
+            RadiusTopRight: =6
+            RadiusBottomLeft: =6
+            RadiusBottomRight: =6
+            Size: =13
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Set(varWizardStage, "access")
+      - btnStageSystems:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =916
+            Y: =120
+            Width: =438
+            Height: =40
+            Text: ="3  ·  Systems & Lists"
+            Color: =If(varWizardStage = "systems", RGBA(255,255,255,1), RGBA(90,98,88,1))
+            Fill: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(240,241,233,1))
+            HoverFill: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(228,231,217,1))
+            PressedFill: =RGBA(0,60,50,1)
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =6
+            RadiusTopRight: =6
+            RadiusBottomLeft: =6
+            RadiusBottomRight: =6
+            Size: =13
+            FontWeight: =FontWeight.Semibold
+            OnSelect: =Set(varWizardStage, "systems")
+      - recStageTabsBorder:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =172
+            Width: =1366
+            Height: =1
+            Fill: =RGBA(220,220,220,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+
+      # ============================================================
+      # STAGE 1 — CORE DETAILS  (Visible: varWizardStage = "core")
+      # ============================================================
       - recCoreCard:
           Control: Classic/Button@2.2.0
           Properties:
             X: =12
-            Y: =116
+            Y: =184
             Width: =1342
             Height: =180
             Fill: =RGBA(255,255,255,1)
@@ -176,11 +273,12 @@ Screens:
             RadiusBottomRight: =8
             DisplayMode: =DisplayMode.View
             Text: =""
+            Visible: =varWizardStage = "core"
       - lblCoreMovType:
           Control: Label@2.5.1
           Properties:
             X: =28
-            Y: =124
+            Y: =192
             Width: =300
             Height: =24
             Text: =Coalesce(varSelectedRecord.'Movement Type'.Value, "Movement type not set")
@@ -190,11 +288,12 @@ Screens:
             FontWeight: =FontWeight.Semibold
             PaddingLeft: =10
             PaddingRight: =10
+            Visible: =varWizardStage = "core"
       - lblCoreName:
           Control: Label@2.5.1
           Properties:
             X: =28
-            Y: =152
+            Y: =220
             Width: =860
             Height: =40
             Text: =Coalesce(varSelectedRecord.Title, "—")
@@ -202,42 +301,46 @@ Screens:
             Size: =22
             FontWeight: =FontWeight.Bold
             VerticalAlign: =VerticalAlign.Middle
+            Visible: =varWizardStage = "core"
       - lblCorePositionType:
           Control: Label@2.5.1
           Properties:
             X: =28
-            Y: =196
+            Y: =264
             Width: =300
             Height: =24
             Text: =Coalesce(varSelectedRecord.'Position Type'.Value, "Position not set")
             Color: =RGBA(100,100,100,1)
             Size: =13
+            Visible: =varWizardStage = "core"
       - lblCoreRole:
           Control: Label@2.5.1
           Properties:
             X: =28
-            Y: =224
+            Y: =292
             Width: =500
             Height: =24
             Text: '=If(IsBlank(varSelectedRecord.''Desired Role Name''), "Role not set", "Role: " & varSelectedRecord.''Desired Role Name'')'
             Color: =RGBA(100,100,100,1)
             Size: =13
+            Visible: =varWizardStage = "core"
       - lblCoreStaffNo:
           Control: Label@2.5.1
           Properties:
             X: =900
-            Y: =152
+            Y: =220
             Width: =440
             Height: =24
             Text: '=If(IsBlank(varSelectedRecord.Staff_x002f_ServiceNo), "No staff number", "Staff No: " & varSelectedRecord.Staff_x002f_ServiceNo)'
             Color: =RGBA(100,100,100,1)
             Size: =13
             Align: =Align.Right
+            Visible: =varWizardStage = "core"
       - recDatesCard:
           Control: Classic/Button@2.2.0
           Properties:
             X: =12
-            Y: =304
+            Y: =372
             Width: =1342
             Height: =100
             Fill: =RGBA(255,255,255,1)
@@ -252,24 +355,27 @@ Screens:
             RadiusBottomRight: =8
             DisplayMode: =DisplayMode.View
             Text: =""
+            Visible: =varWizardStage = "core"
       - lblStartDateLabel:
           Control: Label@2.5.1
           Properties:
             X: =28
-            Y: =310
+            Y: =378
             Width: =200
             Height: =18
             Text: ="Confirmed Start Date"
             Color: =RGBA(100,100,100,1)
             Size: =11
+            Visible: =varWizardStage = "core"
       - dpStartDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
             X: =28
-            Y: =328
+            Y: =396
             Width: =300
             Height: =40
             DefaultDate: =varSelectedRecord.'Confirmed Start Date'
+            Visible: =varWizardStage = "core"
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'Confirmed Start Date': Self.SelectedDate}
@@ -280,394 +386,60 @@ Screens:
           Control: Label@2.5.1
           Properties:
             X: =700
-            Y: =310
+            Y: =378
             Width: =220
             Height: =18
             Text: ="Confirmed Leaving Date"
             Color: =RGBA(100,100,100,1)
             Size: =11
+            Visible: =varWizardStage = "core"
       - dpLeavingDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
             X: =700
-            Y: =328
+            Y: =396
             Width: =300
             Height: =40
             DefaultDate: =varSelectedRecord.'Confirmed Leaving Date'
+            Visible: =varWizardStage = "core"
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'Confirmed Leaving Date': Self.SelectedDate}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - recAdminHeader:
-          Control: Classic/Button@2.2.0
+      - btnStage1Next:
+          Control: ModernButton@1.0.0
           Properties:
-            X: =0
-            Y: =416
-            Width: =1366
+            X: =1234
+            Y: =492
+            Width: =120
             Height: =36
-            Fill: =RGBA(230,237,235,1)
-            HoverFill: =Self.Fill
-            PressedFill: =Self.Fill
-            DisabledFill: =Self.Fill
-            BorderThickness: =0
-            DisplayMode: =DisplayMode.View
-            Text: =""
-      - lblAdminHeader:
+            Text: ="Next ›"
+            BasePaletteColor: =RGBA(0,78,66,1)
+            Visible: =varWizardStage = "core"
+            OnSelect: =Set(varWizardStage, "access")
+
+      # ============================================================
+      # STAGE 2 — ACCESS & ACCOUNTS  (Visible: varWizardStage = "access")
+      # ============================================================
+      - lblAccessBPS:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =416
-            Width: =400
-            Height: =36
-            Text: ="Admin Duties"
-            Color: =RGBA(0,78,66,1)
-            Size: =13
-            FontWeight: =FontWeight.Bold
-            VerticalAlign: =VerticalAlign.Middle
-      - lblAdminBranchExecs:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =458
-            Width: =360
-            Height: =40
-            Text: ="Branch Execs Invites" & Char(10) & If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), "Not done", Text(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex, "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnAdminBranchExecsToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =390
-            Y: =462
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex)
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {Add_x0020_to_x0020_ACOS_x0020_Ex: Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblAdminTrainingMatrix:
-          Control: Label@2.5.1
-          Properties:
-            X: =700
-            Y: =458
-            Width: =360
-            Height: =40
-            Text: ="Training Matrix" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), "Not done", Text(varSelectedRecord.'Added/Removed to Training Matrix', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnAdminTrainingMatrixToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =1070
-            Y: =462
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed to Training Matrix')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed to Training Matrix': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - recAdminRow2:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =0
-            Y: =504
-            Width: =1366
-            Height: =1
-            Fill: =RGBA(230,237,235,0.4)
-            HoverFill: =Self.Fill
-            PressedFill: =Self.Fill
-            DisabledFill: =Self.Fill
-            BorderThickness: =0
-            DisplayMode: =DisplayMode.View
-            Text: =""
-      - lblAdminLeaveTracker:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =510
-            Width: =360
-            Height: =40
-            Text: ="Leave Tracker" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), "Not done", Text(varSelectedRecord.'Added/Removed on Leave Tracker', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnAdminLeaveTrackerToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =390
-            Y: =514
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed on Leave Tracker': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblAdminExcelContacts:
-          Control: Label@2.5.1
-          Properties:
-            X: =700
-            Y: =510
-            Width: =360
-            Height: =40
-            Text: ="Excel Contact List" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), "Not done", Text(varSelectedRecord.'Added/Removed on Excel Contact List', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnAdminExcelContactsToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =1070
-            Y: =514
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed on Excel Contact List': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblAdminACOSLabel:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =558
-            Width: =200
-            Height: =18
-            Text: ="ACOS Execs Invites"
-            Color: =RGBA(100,100,100,1)
-            Size: =11
-      - drpAdminACOS:
-          Control: ModernDropdown@1.0.1
-          Properties:
-            X: =20
-            Y: =576
-            Width: =300
-            Height: =40
-            Items: =["Added", "Removed", "N/A"]
-            ItemDisplayText: =ThisItem.Value
-            Default: '=With({_v: Coalesce(varSelectedRecord.''Added/Removed ACOS Execs Invites''.Value, "")}, {Value: _v})'
-            OnChange: |-
-              =If(
-                  !IsBlank(Self.Selected.Value),
-                  Patch('Staff Movements (LTD)', varSelectedRecord,
-                      {'Added/Removed ACOS Execs Invites': {Value: Self.Selected.Value}}
-                  );
-                  Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-                  ClearCollect(colMovements, 'Staff Movements (LTD)')
-              )
-      - recIXHeader:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =0
-            Y: =632
-            Width: =1366
-            Height: =36
-            Fill: =RGBA(230,237,235,1)
-            HoverFill: =Self.Fill
-            PressedFill: =Self.Fill
-            DisabledFill: =Self.Fill
-            BorderThickness: =0
-            DisplayMode: =DisplayMode.View
-            Text: =""
-      - lblIXHeader:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =632
-            Width: =400
-            Height: =36
-            Text: ="IX Duties"
-            Color: =RGBA(0,78,66,1)
-            Size: =13
-            FontWeight: =FontWeight.Bold
-            VerticalAlign: =VerticalAlign.Middle
-      - lblIXOrgChart:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =674
-            Width: =360
-            Height: =40
-            Text: ="Org Chart" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), "Not done", Text(varSelectedRecord.'Added/Removed on Org Chart', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnIXOrgChartToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =390
-            Y: =678
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Org Chart')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed on Org Chart': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIXBranchStructure:
-          Control: Label@2.5.1
-          Properties:
-            X: =700
-            Y: =674
-            Width: =360
-            Height: =40
-            Text: ="Branch Structure" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), "Not done", Text(varSelectedRecord.'Added/Removed From Branch Structure', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnIXBranchStructureToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =1070
-            Y: =678
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed From Branch Structure')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed From Branch Structure': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIXSPLanding:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =722
-            Width: =360
-            Height: =40
-            Text: ="SP Team Landing Page" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), "Not done", Text(varSelectedRecord.'Added/Removed SP Team Landing Page', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnIXSPLandingToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =390
-            Y: =726
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed SP Team Landing Page': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - recIMHeader:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =0
-            Y: =776
-            Width: =1366
-            Height: =36
-            Fill: =RGBA(230,237,235,1)
-            HoverFill: =Self.Fill
-            PressedFill: =Self.Fill
-            DisabledFill: =Self.Fill
-            BorderThickness: =0
-            DisplayMode: =DisplayMode.View
-            Text: =""
-      - lblIMHeader:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =776
-            Width: =400
-            Height: =36
-            Text: ="IM Duties"
-            Color: =RGBA(0,78,66,1)
-            Size: =13
-            FontWeight: =FontWeight.Bold
-            VerticalAlign: =VerticalAlign.Middle
-      - lblIMBPS:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =818
+            Y: =184
             Width: =360
             Height: =40
             Text: ="Confirm BPS Cleared" & Char(10) & If(IsBlank(varSelectedRecord.'Confirm BPS Cleared'), "Not done", Text(varSelectedRecord.'Confirm BPS Cleared', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'Confirm BPS Cleared'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'Confirm BPS Cleared'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-      - btnIMBPSToday:
+            Visible: =varWizardStage = "access"
+      - btnAccessBPSToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =390
-            Y: =822
+            Y: =188
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -678,29 +450,30 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Confirm BPS Cleared')
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'Confirm BPS Cleared')
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'Confirm BPS Cleared': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMMODNet:
+      - lblAccessMODNetReq:
           Control: Label@2.5.1
           Properties:
             X: =700
-            Y: =818
+            Y: =184
             Width: =360
             Height: =40
             Text: ="MODNet Account Request" & Char(10) & If(IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub'), "Not done", Text(varSelectedRecord.'MODNet Account Request Submitted to iHub', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-      - btnIMMODNetToday:
+            Visible: =varWizardStage = "access"
+      - btnAccessMODNetReqToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =1070
-            Y: =822
+            Y: =188
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -711,29 +484,30 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub')
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MODNet Account Request Submitted to iHub')
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MODNet Account Request Submitted to iHub': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMMODNetIssued:
+      - lblAccessMODNetIssued:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =870
+            Y: =236
             Width: =360
             Height: =40
             Text: ="MODNet Account Issued" & Char(10) & If(IsBlank(varSelectedRecord.'MODNet Account Issued'), "Not done", Text(varSelectedRecord.'MODNet Account Issued', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MODNet Account Issued'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MODNet Account Issued'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-      - btnIMMODNetIssuedToday:
+            Visible: =varWizardStage = "access"
+      - btnAccessMODNetIssuedToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =390
-            Y: =874
+            Y: =240
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -744,33 +518,35 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MODNet Account Issued')
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MODNet Account Issued')
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MODNet Account Issued': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMMMLOrMOVDLabel:
+      - lblAccessMMLOrMOVDLabel:
           Control: Label@2.5.1
           Properties:
             X: =700
-            Y: =870
+            Y: =236
             Width: =200
             Height: =18
             Text: ="MML or MOVD?"
             Color: =RGBA(100,100,100,1)
             Size: =11
-      - drpIMMMLOrMOVD:
+            Visible: =varWizardStage = "access"
+      - drpAccessMMLOrMOVD:
           Control: ModernDropdown@1.0.1
           Properties:
             X: =700
-            Y: =888
+            Y: =254
             Width: =260
             Height: =40
             Items: =["MML", "MOVD", "Both", "Neither"]
             ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''MML or MOVD?''.Value, "")}, {Value: _v})'
+            Visible: =varWizardStage = "access"
             OnChange: |-
               =If(
                   !IsBlank(Self.Selected.Value),
@@ -780,23 +556,23 @@ Screens:
                   Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
                   ClearCollect(colMovements, 'Staff Movements (LTD)')
               )
-      - lblIMMMLReq:
+      - lblAccessMMLReq:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =922
+            Y: =312
             Width: =360
             Height: =40
             Text: ="MML Requested via OPBC" & Char(10) & If(IsBlank(varSelectedRecord.'MML Requested via OPBC'), "Not done", Text(varSelectedRecord.'MML Requested via OPBC', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MML Requested via OPBC'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MML Requested via OPBC'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
-      - btnIMMMLReqToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+      - btnAccessMMLReqToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =390
-            Y: =926
+            Y: =316
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -807,30 +583,30 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MML Requested via OPBC') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MML Requested via OPBC') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MML Requested via OPBC': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMMMLApproved:
+      - lblAccessMMLApproved:
           Control: Label@2.5.1
           Properties:
             X: =700
-            Y: =922
+            Y: =312
             Width: =360
             Height: =40
             Text: ="MML Approved" & Char(10) & If(IsBlank(varSelectedRecord.'MML Approved'), "Not done", Text(varSelectedRecord.'MML Approved', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MML Approved'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MML Approved'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
-      - btnIMMMLApprovedToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+      - btnAccessMMLApprovedToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =1070
-            Y: =926
+            Y: =316
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -841,30 +617,30 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MML Approved') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MML Approved') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MML Approved': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMMMLIssued:
+      - lblAccessMMLIssued:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =974
+            Y: =364
             Width: =360
             Height: =40
             Text: ="MML Issued" & Char(10) & If(IsBlank(varSelectedRecord.'MML Issued'), "Not done", Text(varSelectedRecord.'MML Issued', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MML Issued'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MML Issued'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
-      - btnIMMMLIssuedToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+      - btnAccessMMLIssuedToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =390
-            Y: =978
+            Y: =368
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -875,35 +651,35 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MML Issued') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MML Issued') && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MML Issued': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMMMLStatusLabel:
+      - lblAccessMMLStatusLabel:
           Control: Label@2.5.1
           Properties:
             X: =700
-            Y: =974
+            Y: =364
             Width: =200
             Height: =18
             Text: ="MML Status"
             Color: =RGBA(100,100,100,1)
             Size: =11
-            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
-      - drpIMMMLStatus:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+      - drpAccessMMLStatus:
           Control: ModernDropdown@1.0.1
           Properties:
             X: =700
-            Y: =992
+            Y: =382
             Width: =260
             Height: =40
             Items: =["Not Required", "Requested", "Approved", "Issued", "Active"]
             ItemDisplayText: =ThisItem.Value
             Default: '=With({_v: Coalesce(varSelectedRecord.''MML Status''.Value, "")}, {Value: _v})'
-            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'MML or MOVD?'.Value = "MML" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
             OnChange: |-
               =If(
                   !IsBlank(Self.Selected.Value),
@@ -913,23 +689,23 @@ Screens:
                   Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
                   ClearCollect(colMovements, 'Staff Movements (LTD)')
               )
-      - lblIMMOVDReq:
+      - lblAccessMOVDReq:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =1026
+            Y: =430
             Width: =360
             Height: =40
             Text: ="MOVD Requested" & Char(10) & If(IsBlank(varSelectedRecord.'MOVD Requested'), "Not done", Text(varSelectedRecord.'MOVD Requested', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MOVD Requested'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MOVD Requested'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
-      - btnIMMOVDReqToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+      - btnAccessMOVDReqToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =390
-            Y: =1030
+            Y: =434
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -940,30 +716,30 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MOVD Requested') && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MOVD Requested') && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MOVD Requested': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMMOVDActive:
+      - lblAccessMOVDActive:
           Control: Label@2.5.1
           Properties:
             X: =700
-            Y: =1026
+            Y: =430
             Width: =360
             Height: =40
             Text: ="MOVD Active" & Char(10) & If(IsBlank(varSelectedRecord.'MOVD Active'), "Not done", Text(varSelectedRecord.'MOVD Active', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MOVD Active'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MOVD Active'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both"
-      - btnIMMOVDActiveToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+      - btnAccessMOVDActiveToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =1070
-            Y: =1030
+            Y: =434
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -974,131 +750,34 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MOVD Active') && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MOVD Active') && (varSelectedRecord.'MML or MOVD?'.Value = "MOVD" || varSelectedRecord.'MML or MOVD?'.Value = "Both")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MOVD Active': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMOutlookContacts:
+      - lblAccessUpgradeLabel:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =1078
-            Width: =360
-            Height: =40
-            Text: ="Outlook Contact Lists" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), "Not done", Text(varSelectedRecord.'Added/Removed on Outlook contact lists', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnIMOutlookContactsToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =390
-            Y: =1082
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed on Outlook contact lists': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMShareTeams:
-          Control: Label@2.5.1
-          Properties:
-            X: =700
-            Y: =1078
-            Width: =360
-            Height: =40
-            Text: ="Share Army-Cadets MS Teams" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), "Not done", Text(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnIMShareTeamsToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =1070
-            Y: =1082
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed Share Army-Cadets MS Teams': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMSharingOutlook:
-          Control: Label@2.5.1
-          Properties:
-            X: =20
-            Y: =1130
-            Width: =360
-            Height: =40
-            Text: ="Sharing Outlook Contacts" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), "Not done", Text(varSelectedRecord.'Added/Removed Sharing Outlook Contacts', "dd mmm yyyy"))
-            Color: =If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), RGBA(100,100,100,1), RGBA(0,110,45,1))
-            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), FontWeight.Normal, FontWeight.Semibold)
-            Size: =13
-      - btnIMSharingOutlookToday:
-          Control: Classic/Button@2.2.0
-          Properties:
-            X: =390
-            Y: =1134
-            Width: =100
-            Height: =28
-            Text: ="Set Today"
-            Color: =RGBA(255,255,255,1)
-            Fill: =RGBA(0,78,66,1)
-            HoverFill: =RGBA(0,60,50,1)
-            PressedFill: =RGBA(0,40,34,1)
-            DisabledFill: =RGBA(200,200,200,1)
-            BorderThickness: =0
-            Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts')
-            OnSelect: |-
-              =Patch('Staff Movements (LTD)', varSelectedRecord,
-                  {'Added/Removed Sharing Outlook Contacts': Today()}
-              );
-              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
-              ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMUpgradeLabel:
-          Control: Label@2.5.1
-          Properties:
-            X: =700
-            Y: =1130
+            Y: =482
             Width: =300
             Height: =18
             Text: ="Upgrade M365 License"
             Color: =RGBA(100,100,100,1)
             Size: =11
-      - tglIMUpgrade:
+            Visible: =varWizardStage = "access"
+      - tglAccessUpgrade:
           Control: Toggle@1.1.5
           Properties:
-            X: =700
-            Y: =1150
-            Width: =200
+            X: =20
+            Y: =500
+            Width: =260
             Height: =36
             Label: =If(varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes", "Yes — upgrade needed", "No upgrade needed")
             Checked: =varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes"
+            Visible: =varWizardStage = "access"
             OnCheck: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {Upgrade_x0020_M365_x0020_License: {Value: "Yes"}}
@@ -1111,37 +790,37 @@ Screens:
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblIMUpgradeDateLabel:
+      - lblAccessUpgradeDateLabel:
           Control: Label@2.5.1
           Properties:
-            X: =20
-            Y: =1182
+            X: =700
+            Y: =482
             Width: =250
             Height: =18
             Text: ="M365 Upgrade Date"
             Color: =RGBA(100,100,100,1)
             Size: =11
-            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes"
-      - dpIMUpgradeDate:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes")
+      - dpAccessUpgradeDate:
           Control: Classic/DatePicker@2.6.0
           Properties:
-            X: =20
-            Y: =1200
+            X: =700
+            Y: =500
             Width: =300
             Height: =40
             DefaultDate: =varSelectedRecord.'Upgrade M365 License Date'
-            Visible: =varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes"
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes")
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'Upgrade M365 License Date': Self.SelectedDate}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - recLeaverTasksHeader:
+      - recAccessLeaverHeader:
           Control: Classic/Button@2.2.0
           Properties:
             X: =0
-            Y: =1252
+            Y: =564
             Width: =1366
             Height: =36
             Fill: =RGBA(255,237,210,1)
@@ -1151,12 +830,12 @@ Screens:
             BorderThickness: =0
             DisplayMode: =DisplayMode.View
             Text: =""
-            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
-      - lblLeaverTasksHeader:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+      - lblAccessLeaverHeader:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =1252
+            Y: =564
             Width: =400
             Height: =36
             Text: ="Leaver Tasks"
@@ -1164,24 +843,24 @@ Screens:
             Size: =13
             FontWeight: =FontWeight.Bold
             VerticalAlign: =VerticalAlign.Middle
-            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
-      - lblLeaverMOVDDeact:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+      - lblAccessMOVDDeact:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =1294
+            Y: =606
             Width: =360
             Height: =40
             Text: ="MOVD Deactivation Requested" & Char(10) & If(IsBlank(varSelectedRecord.'MOVD deactivation requested'), "Not done", Text(varSelectedRecord.'MOVD deactivation requested', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'MOVD deactivation requested'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'MOVD deactivation requested'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
-      - btnLeaverMOVDDeactToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+      - btnAccessMOVDDeactToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =390
-            Y: =1298
+            Y: =610
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -1192,30 +871,30 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'MOVD deactivation requested') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'MOVD deactivation requested') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'MOVD deactivation requested': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblLeaverWestminster:
+      - lblAccessWestminster:
           Control: Label@2.5.1
           Properties:
             X: =700
-            Y: =1294
+            Y: =606
             Width: =360
             Height: =40
             Text: ="Westminster Team Informed" & Char(10) & If(IsBlank(varSelectedRecord.'Westminster team informed'), "Not done", Text(varSelectedRecord.'Westminster team informed', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'Westminster team informed'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'Westminster team informed'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
-      - btnLeaverWestminsterToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+      - btnAccessWestminsterToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =1070
-            Y: =1298
+            Y: =610
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -1226,30 +905,30 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'Westminster team informed') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'Westminster team informed') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'Westminster team informed': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - lblLeaverVDS:
+      - lblAccessVDS:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =1346
+            Y: =658
             Width: =360
             Height: =40
             Text: ="VDS Account Requested" & Char(10) & If(IsBlank(varSelectedRecord.'VDS Account Requested'), "Not done", Text(varSelectedRecord.'VDS Account Requested', "dd mmm yyyy"))
             Color: =If(IsBlank(varSelectedRecord.'VDS Account Requested'), RGBA(100,100,100,1), RGBA(0,110,45,1))
             FontWeight: =If(IsBlank(varSelectedRecord.'VDS Account Requested'), FontWeight.Normal, FontWeight.Semibold)
             Size: =13
-            Visible: =varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD"
-      - btnLeaverVDSToday:
+            Visible: =(varWizardStage = "access") && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+      - btnAccessVDSToday:
           Control: Classic/Button@2.2.0
           Properties:
             X: =390
-            Y: =1350
+            Y: =662
             Width: =100
             Height: =28
             Text: ="Set Today"
@@ -1260,18 +939,45 @@ Screens:
             DisabledFill: =RGBA(200,200,200,1)
             BorderThickness: =0
             Size: =12
-            Visible: =IsBlank(varSelectedRecord.'VDS Account Requested') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
+            Visible: =(varWizardStage = "access") && IsBlank(varSelectedRecord.'VDS Account Requested') && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
             OnSelect: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
                   {'VDS Account Requested': Today()}
               );
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
               ClearCollect(colMovements, 'Staff Movements (LTD)')
-      - recNotesHeader:
+      - btnStage2Back:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =12
+            Y: =716
+            Width: =130
+            Height: =36
+            Text: ="‹ Core Details"
+            BasePaletteColor: =RGBA(120,120,120,1)
+            Visible: =varWizardStage = "access"
+            OnSelect: =Set(varWizardStage, "core")
+      - btnStage2Next:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =1234
+            Y: =716
+            Width: =120
+            Height: =36
+            Text: ="Next ›"
+            BasePaletteColor: =RGBA(0,78,66,1)
+            Visible: =varWizardStage = "access"
+            OnSelect: =Set(varWizardStage, "systems")
+
+      # ============================================================
+      # STAGE 3 — SYSTEMS & LISTS  (Visible: varWizardStage = "systems")
+      # Grouped by who does the work: Admin, IX, IM
+      # ============================================================
+      - recSysAdminHeader:
           Control: Classic/Button@2.2.0
           Properties:
             X: =0
-            Y: =1400
+            Y: =184
             Width: =1366
             Height: =36
             Fill: =RGBA(230,237,235,1)
@@ -1281,11 +987,467 @@ Screens:
             BorderThickness: =0
             DisplayMode: =DisplayMode.View
             Text: =""
-      - lblNotesHeader:
+            Visible: =varWizardStage = "systems"
+      - lblSysAdminHeader:
           Control: Label@2.5.1
           Properties:
             X: =20
-            Y: =1400
+            Y: =184
+            Width: =400
+            Height: =36
+            Text: ="Admin Duties"
+            Color: =RGBA(0,78,66,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+            Visible: =varWizardStage = "systems"
+      - lblSysAdminBranchExecs:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =226
+            Width: =360
+            Height: =40
+            Text: ="Branch Execs Invites" & Char(10) & If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), "Not done", Text(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex, "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysAdminBranchExecsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =230
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.Add_x0020_to_x0020_ACOS_x0020_Ex)
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {Add_x0020_to_x0020_ACOS_x0020_Ex: Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysAdminTrainingMatrix:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =226
+            Width: =360
+            Height: =40
+            Text: ="Training Matrix" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), "Not done", Text(varSelectedRecord.'Added/Removed to Training Matrix', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed to Training Matrix'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysAdminTrainingMatrixToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =230
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed to Training Matrix')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed to Training Matrix': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysAdminLeaveTracker:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =278
+            Width: =360
+            Height: =40
+            Text: ="Leave Tracker" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), "Not done", Text(varSelectedRecord.'Added/Removed on Leave Tracker', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysAdminLeaveTrackerToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =282
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed on Leave Tracker')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Leave Tracker': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysAdminExcelContacts:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =278
+            Width: =360
+            Height: =40
+            Text: ="Excel Contact List" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), "Not done", Text(varSelectedRecord.'Added/Removed on Excel Contact List', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysAdminExcelContactsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =282
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed on Excel Contact List')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Excel Contact List': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysAdminOutlookContacts:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =330
+            Width: =360
+            Height: =40
+            Text: ="Outlook Contact Lists" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), "Not done", Text(varSelectedRecord.'Added/Removed on Outlook contact lists', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysAdminOutlookContactsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =334
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed on Outlook contact lists')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Outlook contact lists': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysAdminSharingOutlook:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =330
+            Width: =360
+            Height: =40
+            Text: ="Sharing Outlook Contacts" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), "Not done", Text(varSelectedRecord.'Added/Removed Sharing Outlook Contacts', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysAdminSharingOutlookToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =334
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed Sharing Outlook Contacts')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed Sharing Outlook Contacts': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysAdminACOSLabel:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =382
+            Width: =200
+            Height: =18
+            Text: ="ACOS Execs Invites"
+            Color: =RGBA(100,100,100,1)
+            Size: =11
+            Visible: =varWizardStage = "systems"
+      - drpSysAdminACOS:
+          Control: ModernDropdown@1.0.1
+          Properties:
+            X: =20
+            Y: =400
+            Width: =300
+            Height: =40
+            Items: =["Added", "Removed", "N/A"]
+            ItemDisplayText: =ThisItem.Value
+            Default: '=With({_v: Coalesce(varSelectedRecord.''Added/Removed ACOS Execs Invites''.Value, "")}, {Value: _v})'
+            Visible: =varWizardStage = "systems"
+            OnChange: |-
+              =If(
+                  !IsBlank(Self.Selected.Value),
+                  Patch('Staff Movements (LTD)', varSelectedRecord,
+                      {'Added/Removed ACOS Execs Invites': {Value: Self.Selected.Value}}
+                  );
+                  Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+                  ClearCollect(colMovements, 'Staff Movements (LTD)')
+              )
+      - recSysIXHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =456
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(230,237,235,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+            Visible: =varWizardStage = "systems"
+      - lblSysIXHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =456
+            Width: =400
+            Height: =36
+            Text: ="IX Duties"
+            Color: =RGBA(0,78,66,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+            Visible: =varWizardStage = "systems"
+      - lblSysIXOrgChart:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =498
+            Width: =360
+            Height: =40
+            Text: ="Org Chart" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), "Not done", Text(varSelectedRecord.'Added/Removed on Org Chart', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed on Org Chart'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysIXOrgChartToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =502
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed on Org Chart')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed on Org Chart': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysIXBranchStructure:
+          Control: Label@2.5.1
+          Properties:
+            X: =700
+            Y: =498
+            Width: =360
+            Height: =40
+            Text: ="Branch Structure" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), "Not done", Text(varSelectedRecord.'Added/Removed From Branch Structure', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed From Branch Structure'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysIXBranchStructureToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1070
+            Y: =502
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed From Branch Structure')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed From Branch Structure': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - lblSysIXSPLanding:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =550
+            Width: =360
+            Height: =40
+            Text: ="SP Team Landing Page" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), "Not done", Text(varSelectedRecord.'Added/Removed SP Team Landing Page', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysIXSPLandingToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =554
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed SP Team Landing Page')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed SP Team Landing Page': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - recSysIMHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =622
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(230,237,235,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+            Visible: =varWizardStage = "systems"
+      - lblSysIMHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =622
+            Width: =400
+            Height: =36
+            Text: ="IM Duties"
+            Color: =RGBA(0,78,66,1)
+            Size: =13
+            FontWeight: =FontWeight.Bold
+            VerticalAlign: =VerticalAlign.Middle
+            Visible: =varWizardStage = "systems"
+      - lblSysIMShareTeams:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =664
+            Width: =360
+            Height: =40
+            Text: ="Share Army-Cadets MS Teams" & Char(10) & If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), "Not done", Text(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams', "dd mmm yyyy"))
+            Color: =If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), RGBA(100,100,100,1), RGBA(0,110,45,1))
+            FontWeight: =If(IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams'), FontWeight.Normal, FontWeight.Semibold)
+            Size: =13
+            Visible: =varWizardStage = "systems"
+      - btnSysIMShareTeamsToday:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =390
+            Y: =668
+            Width: =100
+            Height: =28
+            Text: ="Set Today"
+            Color: =RGBA(255,255,255,1)
+            Fill: =RGBA(0,78,66,1)
+            HoverFill: =RGBA(0,60,50,1)
+            PressedFill: =RGBA(0,40,34,1)
+            DisabledFill: =RGBA(200,200,200,1)
+            BorderThickness: =0
+            Size: =12
+            Visible: =(varWizardStage = "systems") && IsBlank(varSelectedRecord.'Added/Removed Share Army-Cadets MS Teams')
+            OnSelect: |-
+              =Patch('Staff Movements (LTD)', varSelectedRecord,
+                  {'Added/Removed Share Army-Cadets MS Teams': Today()}
+              );
+              Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID));
+              ClearCollect(colMovements, 'Staff Movements (LTD)')
+      - recSysNotesHeader:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =0
+            Y: =734
+            Width: =1366
+            Height: =36
+            Fill: =RGBA(230,237,235,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+            Visible: =varWizardStage = "systems"
+      - lblSysNotesHeader:
+          Control: Label@2.5.1
+          Properties:
+            X: =20
+            Y: =734
             Width: =400
             Height: =36
             Text: ="Notes"
@@ -1293,19 +1455,47 @@ Screens:
             Size: =13
             FontWeight: =FontWeight.Bold
             VerticalAlign: =VerticalAlign.Middle
-      - txtNotes:
+            Visible: =varWizardStage = "systems"
+      - txtSysNotes:
           Control: ModernTextInput@1.1.0
           Properties:
             X: =20
-            Y: =1444
+            Y: =778
             Width: =1326
-            Height: =140
+            Height: =120
             Default: =PlainText(varSelectedRecord.Notes)
             Placeholder: ="Add notes here..."
             Type: =TextInputType.Multiline
+            Visible: =varWizardStage = "systems"
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord, {Notes: Self.Text});
               Set(varSelectedRecord, LookUp('Staff Movements (LTD)', ID = varSelectedRecord.ID))
+      - btnStage3Back:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =12
+            Y: =918
+            Width: =160
+            Height: =36
+            Text: ="‹ Access & Accounts"
+            BasePaletteColor: =RGBA(120,120,120,1)
+            Visible: =varWizardStage = "systems"
+            OnSelect: =Set(varWizardStage, "access")
+      - btnStage3Done:
+          Control: ModernButton@1.0.0
+          Properties:
+            X: =1194
+            Y: =918
+            Width: =160
+            Height: =36
+            Text: ="Done for now"
+            BasePaletteColor: =RGBA(0,78,66,1)
+            Visible: =varWizardStage = "systems"
+            OnSelect: =Notify("Progress saved — every field here already saves as you go.", NotificationType.Success)
+
+      # ============================================================
+      # OVERLAYS — unchanged, not stage-gated
+      # ============================================================
       - recEditPanelOverlay:
           Control: Classic/Button@2.2.0
           Properties:
