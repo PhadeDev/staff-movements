@@ -74,6 +74,29 @@
     ol, ul { padding-left: 24px; color: #aaa; font-size: 0.9rem; line-height: 2; }
     a.back { font-size: 0.82rem; color: #666; text-decoration: none; display: inline-block; margin-bottom: 32px; }
     a.back:hover { color: #999; }
+    .note-open-link {
+      font-size: 0.82rem; color: #7c4dff; background: none; border: none; cursor: pointer;
+      font-family: inherit; display: inline-block; margin-left: 16px; margin-bottom: 32px; text-decoration: underline;
+    }
+    .note-open-link:hover { color: #9a75ff; }
+    #note-dialog { border: 1px solid #2a2a3a; border-radius: 12px; padding: 0; background: #1a1a2e; color: #e8e8f0; width: min(560px, 92vw); }
+    #note-dialog::backdrop { background: rgba(0,0,0,.6); }
+    .note-form { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .note-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .note-head h2 { margin: 0; font-size: 1.05rem; color: #c8b8ff; }
+    .note-x { border: none; background: none; color: #888; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+    .note-hint-text { margin: 0; color: #888; font-size: .82rem; }
+    .note-label { font-size: .82rem; font-weight: 700; color: #aaa; }
+    .note-hint { font-weight: 400; color: #666; }
+    #note-password, #note-text {
+      padding: 8px 10px; border: 1px solid #2a2a3a; border-radius: 7px;
+      background: #0f0f1a; color: #e8e8f0; font: inherit;
+    }
+    #note-text { resize: vertical; font-family: inherit; line-height: 1.4; }
+    #note-submit { border: none; border-radius: 7px; padding: 9px 16px; font: inherit; font-weight: 700; background: #7c4dff; color: #fff; cursor: pointer; }
+    #note-submit:hover { background: #6a3de8; }
+    .note-actions { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+    .note-status { font-size: .82rem; color: #888; }
     .badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; margin-left: 6px; }
     .badge-new { background: #1a3a1a; color: #4a9; }
     .badge-existing { background: #1a1a3a; color: #66a; }
@@ -81,7 +104,8 @@
 </head>
 <body>
 
-<a class="back" href="https://phaderon.github.io/PowerApps/">&#8592; Guide Library</a>
+<a class="back" href="https://powerapps.pages.dev/">&#8592; Guide Library</a>
+<button type="button" id="open-note" class="note-open-link">Leave a note for Claude</button>
 <h1>Staff Movements <span style="font-size:0.65em;font-weight:400;color:#666;vertical-align:middle;margin-left:8px;">v2.2</span></h1>
 <p style="font-size:0.75rem;color:#3a3a55;font-family:'Cascadia Code','Consolas',monospace;margin-bottom:4px;">Built 24 Jun 2026  04:32 BST</p>
 <p class="subtitle">Canvas app — tracks staff joining and leaving the branch. Four tab views (All / Admin / IX / IM), per-duty Set Today buttons, and a leaver lifecycle workflow. Wraps the existing <code>Staff Movements</code> SharePoint list.</p>
@@ -227,6 +251,52 @@ async function copyBlock(btn, id) {
     btn.textContent = 'Failed';
   }
 }
+</script>
+
+<dialog id="note-dialog">
+  <form method="dialog" class="note-form" id="note-form">
+    <div class="note-head">
+      <h2>Leave a note for Claude &mdash; Staff Movements</h2>
+      <button type="button" id="note-close" aria-label="Close" class="note-x">&times;</button>
+    </div>
+    <p class="note-hint-text">Saved into the shared locked storage bucket only Claude can read &mdash; not public. Auto-deletes after 14 days.</p>
+    <label class="note-label" for="note-password">Password <span class="note-hint">(hint: Theta&hellip;)</span></label>
+    <input type="password" id="note-password" autocomplete="off" required />
+    <label class="note-label" for="note-text">Note</label>
+    <textarea id="note-text" rows="8" required placeholder="Type or paste anything..."></textarea>
+    <div class="note-actions">
+      <button type="submit" id="note-submit">Save note</button>
+      <span id="note-status" class="note-status"></span>
+    </div>
+  </form>
+</dialog>
+<script>
+(function(){
+  var dialog = document.getElementById('note-dialog');
+  document.getElementById('open-note').addEventListener('click', function(e){ e.preventDefault(); dialog.showModal(); });
+  document.getElementById('note-close').addEventListener('click', function(){ dialog.close(); });
+  document.getElementById('note-form').addEventListener('submit', async function(e){
+    e.preventDefault();
+    var status = document.getElementById('note-status');
+    var password = document.getElementById('note-password').value;
+    var text = document.getElementById('note-text').value;
+    if (!text.trim()) return;
+    var stamp = new Date().toISOString().replace(/[:.]/g, '-');
+    var file = new File([text], 'note-staff-movements-' + stamp + '.txt', { type: 'text/plain' });
+    var fd = new FormData();
+    fd.append('password', password);
+    fd.append('files', file);
+    status.textContent = 'Saving...';
+    try {
+      var res = await fetch('https://powerapps.pages.dev/api/upload', { method: 'POST', body: fd });
+      var data = await res.json();
+      if (!res.ok) { status.textContent = data.error || 'Save failed'; return; }
+      status.textContent = 'Saved.';
+      document.getElementById('note-text').value = '';
+      setTimeout(function(){ dialog.close(); status.textContent = ''; }, 900);
+    } catch (err) { status.textContent = 'Save failed'; }
+  });
+})();
 </script>
 </body>
 </html>
