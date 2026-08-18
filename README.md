@@ -4,7 +4,7 @@ Power Apps canvas app for Army Cadets branch staff movement tracking.
 
 ## Live Site
 
-- GitHub Pages: https://phadedev.github.io/staff-movements/
+- Cloudflare Pages: https://staff-movements.pages.dev/ (migrated off GitHub Pages 2026-08-17; GitHub Pages disabled on this repo on purpose — don't re-enable it)
 - Screen copy pages: `docs/screens/`
 - Scratch YAML source: `src/`
 
