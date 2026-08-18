@@ -55,6 +55,25 @@ Screens:
             Size: =18
             FontWeight: =FontWeight.Bold
             VerticalAlign: =VerticalAlign.Middle
+      - recCompleteTagPill:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1120
+            Y: =14
+            Width: =110
+            Height: =28
+            Text: =""
+            Visible: =varSelectedRecord.Complete
+            Fill: =RGBA(210,245,220,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =14
+            RadiusTopRight: =14
+            RadiusBottomLeft: =14
+            RadiusBottomRight: =14
+            DisplayMode: =DisplayMode.View
       - lblCompleteTag:
           Control: Label@2.5.1
           Properties:
@@ -65,7 +84,6 @@ Screens:
             Text: ="Complete"
             Visible: =varSelectedRecord.Complete
             Color: =RGBA(0,100,30,1)
-            Fill: =RGBA(210,245,220,1)
             Size: =12
             FontWeight: =FontWeight.Semibold
             Align: =Align.Center
@@ -173,69 +191,214 @@ Screens:
             BorderThickness: =0
             DisplayMode: =DisplayMode.View
             Text: =""
-      - btnStageCore:
+
+      # --- numbered-circle stepper (inline, no ComponentDefinitions import needed) ---
+      - rctStepLine1:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =245
+            Y: =133
+            Width: =424
+            Height: =2
+            Fill: =If(varWizardStage <> "core", RGBA(0,78,66,1), RGBA(222,225,217,1))
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+      - rctStepLine2:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =697
+            Y: =133
+            Width: =424
+            Height: =2
+            Fill: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(222,225,217,1))
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            DisplayMode: =DisplayMode.View
+            Text: =""
+
+      - btnStep1Circle:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =217
+            Y: =120
+            Width: =28
+            Height: =28
+            Text: =""
+            Fill: =If(varWizardStage <> "core", RGBA(0,78,66,1), RGBA(255,255,255,1))
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderColor: =If(varWizardStage = "core", RGBA(0,78,66,1), If(varWizardStage <> "core", RGBA(0,78,66,1), RGBA(210,214,206,1)))
+            BorderThickness: =2
+            RadiusTopLeft: =14
+            RadiusTopRight: =14
+            RadiusBottomLeft: =14
+            RadiusBottomRight: =14
+            DisplayMode: =DisplayMode.View
+      - lblStep1CircleText:
+          Control: Label@2.5.1
+          Properties:
+            X: =217
+            Y: =120
+            Width: =28
+            Height: =28
+            Text: =If(varWizardStage <> "core", "✓", "1")
+            Color: =If(varWizardStage <> "core", RGBA(255,255,255,1), RGBA(0,78,66,1))
+            Size: =12
+            FontWeight: =FontWeight.Bold
+            Align: =Align.Center
+            VerticalAlign: =VerticalAlign.Middle
+      - btnStep1Hit:
           Control: Classic/Button@2.2.0
           Properties:
             X: =12
-            Y: =120
+            Y: =108
             Width: =438
-            Height: =40
-            Text: ="1  ·  Core Details"
-            Color: =If(varWizardStage = "core", RGBA(255,255,255,1), RGBA(90,98,88,1))
-            Fill: =If(varWizardStage = "core", RGBA(0,78,66,1), RGBA(240,241,233,1))
-            HoverFill: =If(varWizardStage = "core", RGBA(0,78,66,1), RGBA(228,231,217,1))
-            PressedFill: =RGBA(0,60,50,1)
-            DisabledFill: =Self.Fill
+            Height: =64
+            Text: =""
+            Fill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,78,66,0.04)
+            PressedFill: =RGBA(0,78,66,0.08)
+            DisabledFill: =RGBA(0,0,0,0)
             BorderThickness: =0
-            RadiusTopLeft: =6
-            RadiusTopRight: =6
-            RadiusBottomLeft: =6
-            RadiusBottomRight: =6
-            Size: =13
-            FontWeight: =FontWeight.Semibold
             OnSelect: =Set(varWizardStage, "core")
-      - btnStageAccess:
+      - lblStep1Label:
+          Control: Label@2.5.1
+          Properties:
+            X: =12
+            Y: =150
+            Width: =438
+            Height: =16
+            Text: ="Core Details"
+            Color: =If(varWizardStage = "core", RGBA(24,24,24,1), If(varWizardStage <> "core", RGBA(90,98,88,1), RGBA(150,155,148,1)))
+            Size: =11
+            FontWeight: =If(varWizardStage = "core", FontWeight.Semibold, FontWeight.Normal)
+            Align: =Align.Center
+
+      - btnStep2Circle:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =669
+            Y: =120
+            Width: =28
+            Height: =28
+            Text: =""
+            Fill: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(255,255,255,1))
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderColor: =If(varWizardStage = "access" || varWizardStage = "systems", RGBA(0,78,66,1), RGBA(210,214,206,1))
+            BorderThickness: =2
+            RadiusTopLeft: =14
+            RadiusTopRight: =14
+            RadiusBottomLeft: =14
+            RadiusBottomRight: =14
+            DisplayMode: =DisplayMode.View
+      - lblStep2CircleText:
+          Control: Label@2.5.1
+          Properties:
+            X: =669
+            Y: =120
+            Width: =28
+            Height: =28
+            Text: =If(varWizardStage = "systems", "✓", "2")
+            Color: =If(varWizardStage = "systems", RGBA(255,255,255,1), If(varWizardStage = "access", RGBA(0,78,66,1), RGBA(160,166,155,1)))
+            Size: =12
+            FontWeight: =FontWeight.Bold
+            Align: =Align.Center
+            VerticalAlign: =VerticalAlign.Middle
+      - btnStep2Hit:
           Control: Classic/Button@2.2.0
           Properties:
             X: =464
-            Y: =120
+            Y: =108
             Width: =438
-            Height: =40
-            Text: ="2  ·  Access & Accounts"
-            Color: =If(varWizardStage = "access", RGBA(255,255,255,1), RGBA(90,98,88,1))
-            Fill: =If(varWizardStage = "access", RGBA(0,78,66,1), RGBA(240,241,233,1))
-            HoverFill: =If(varWizardStage = "access", RGBA(0,78,66,1), RGBA(228,231,217,1))
-            PressedFill: =RGBA(0,60,50,1)
-            DisabledFill: =Self.Fill
+            Height: =64
+            Text: =""
+            Fill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,78,66,0.04)
+            PressedFill: =RGBA(0,78,66,0.08)
+            DisabledFill: =RGBA(0,0,0,0)
             BorderThickness: =0
-            RadiusTopLeft: =6
-            RadiusTopRight: =6
-            RadiusBottomLeft: =6
-            RadiusBottomRight: =6
-            Size: =13
-            FontWeight: =FontWeight.Semibold
             OnSelect: =Set(varWizardStage, "access")
-      - btnStageSystems:
+      - lblStep2Label:
+          Control: Label@2.5.1
+          Properties:
+            X: =464
+            Y: =150
+            Width: =438
+            Height: =16
+            Text: ="Access & Accounts"
+            Color: =If(varWizardStage = "access", RGBA(24,24,24,1), If(varWizardStage = "systems", RGBA(90,98,88,1), RGBA(150,155,148,1)))
+            Size: =11
+            FontWeight: =If(varWizardStage = "access", FontWeight.Semibold, FontWeight.Normal)
+            Align: =Align.Center
+
+      - btnStep3Circle:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =1121
+            Y: =120
+            Width: =28
+            Height: =28
+            Text: =""
+            Fill: =RGBA(255,255,255,1)
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderColor: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(210,214,206,1))
+            BorderThickness: =2
+            RadiusTopLeft: =14
+            RadiusTopRight: =14
+            RadiusBottomLeft: =14
+            RadiusBottomRight: =14
+            DisplayMode: =DisplayMode.View
+      - lblStep3CircleText:
+          Control: Label@2.5.1
+          Properties:
+            X: =1121
+            Y: =120
+            Width: =28
+            Height: =28
+            Text: ="3"
+            Color: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(160,166,155,1))
+            Size: =12
+            FontWeight: =FontWeight.Bold
+            Align: =Align.Center
+            VerticalAlign: =VerticalAlign.Middle
+      - btnStep3Hit:
           Control: Classic/Button@2.2.0
           Properties:
             X: =916
-            Y: =120
+            Y: =108
             Width: =438
-            Height: =40
-            Text: ="3  ·  Systems & Lists"
-            Color: =If(varWizardStage = "systems", RGBA(255,255,255,1), RGBA(90,98,88,1))
-            Fill: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(240,241,233,1))
-            HoverFill: =If(varWizardStage = "systems", RGBA(0,78,66,1), RGBA(228,231,217,1))
-            PressedFill: =RGBA(0,60,50,1)
-            DisabledFill: =Self.Fill
+            Height: =64
+            Text: =""
+            Fill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,78,66,0.04)
+            PressedFill: =RGBA(0,78,66,0.08)
+            DisabledFill: =RGBA(0,0,0,0)
             BorderThickness: =0
-            RadiusTopLeft: =6
-            RadiusTopRight: =6
-            RadiusBottomLeft: =6
-            RadiusBottomRight: =6
-            Size: =13
-            FontWeight: =FontWeight.Semibold
             OnSelect: =Set(varWizardStage, "systems")
+      - lblStep3Label:
+          Control: Label@2.5.1
+          Properties:
+            X: =916
+            Y: =150
+            Width: =438
+            Height: =16
+            Text: ="Systems & Lists"
+            Color: =If(varWizardStage = "systems", RGBA(24,24,24,1), RGBA(150,155,148,1))
+            Size: =11
+            FontWeight: =If(varWizardStage = "systems", FontWeight.Semibold, FontWeight.Normal)
+            Align: =Align.Center
+
       - recStageTabsBorder:
           Control: Classic/Button@2.2.0
           Properties:
@@ -274,20 +437,37 @@ Screens:
             DisplayMode: =DisplayMode.View
             Text: =""
             Visible: =varWizardStage = "core"
+      - recCoreMovTypePill:
+          Control: Classic/Button@2.2.0
+          Properties:
+            X: =28
+            Y: =192
+            Width: =220
+            Height: =24
+            Text: =""
+            Fill: =If( varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD", RGBA(255,237,210,1), RGBA(220,238,234,1) )
+            HoverFill: =Self.Fill
+            PressedFill: =Self.Fill
+            DisabledFill: =Self.Fill
+            BorderThickness: =0
+            RadiusTopLeft: =12
+            RadiusTopRight: =12
+            RadiusBottomLeft: =12
+            RadiusBottomRight: =12
+            DisplayMode: =DisplayMode.View
       - lblCoreMovType:
           Control: Label@2.5.1
           Properties:
             X: =28
             Y: =192
-            Width: =300
+            Width: =220
             Height: =24
             Text: =Coalesce(varSelectedRecord.'Movement Type'.Value, "Movement type not set")
             Color: =If( varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD", RGBA(140,70,0,1), RGBA(0,78,66,1) )
-            Fill: =If( varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD", RGBA(255,237,210,1), RGBA(220,238,234,1) )
             Size: =12
             FontWeight: =FontWeight.Semibold
-            PaddingLeft: =10
-            PaddingRight: =10
+            Align: =Align.Center
+            VerticalAlign: =VerticalAlign.Middle
             Visible: =varWizardStage = "core"
       - lblCoreName:
           Control: Label@2.5.1
