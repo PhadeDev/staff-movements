@@ -210,13 +210,13 @@ Screens:
             Color: =RGBA(80,80,80,1)
             Size: =12
       - dpAddStartDate:
-          Control: Classic/DatePicker@2.6.0
+          Control: DatePicker@0.0.46
           Properties:
             X: =683
             Y: =274
             Width: =300
             Height: =44
-            DefaultDate: =Today()
+            SelectedDate: =Today()
       - lblAddNotesLabel:
           Control: Label@2.5.1
           Properties:

@@ -106,7 +106,7 @@
 
 <a class="back" href="https://powerapps.pages.dev/">&#8592; Guide Library</a>
 <button type="button" id="open-note" class="note-open-link">Leave a note for Claude</button>
-<h1>Staff Movements <span style="font-size:0.65em;font-weight:400;color:#666;vertical-align:middle;margin-left:8px;">v2.4</span></h1>
+<h1>Staff Movements <span style="font-size:0.65em;font-weight:400;color:#666;vertical-align:middle;margin-left:8px;">v2.5</span></h1>
 <p style="font-size:0.75rem;color:#3a3a55;font-family:'Cascadia Code','Consolas',monospace;margin-bottom:4px;">Built 24 Jun 2026  04:32 BST</p>
 <p class="subtitle">Canvas app — tracks staff joining and leaving the branch. Four tab views (All / Admin / IX / IM), per-duty Set Today buttons, and a leaver lifecycle workflow. Wraps the existing <code>Staff Movements</code> SharePoint list.</p>
 
@@ -199,19 +199,19 @@ ClearCollect(colMovements, 'Staff Movements (LTD)')</pre>
     </div>
     <div class="screen-cta">Open and copy &rarr;</div>
   </a>
-  <a class="screen-card" href="screens/scrRecord.html?v=2.4">
+  <a class="screen-card" href="screens/scrRecord.html?v=2.5">
     <div>
       <div class="screen-number">Screen 2</div>
       <div class="screen-name">scrRecord</div>
-      <div class="screen-desc">v2.4: real bug fix &mdash; Confirmed Start Date and Confirmed Leaving Date were both showing at once regardless of Movement Type (pre-existing since v1.x, just never caught until the wizard made Core Details small enough to notice). Now Start Date only shows for New/Move, Leaving Date only for Leaving, matching the real SharePoint conditional logic. v2.0: rebuilt as a 3-stage wizard (Core Details &rarr; Access &amp; Accounts &rarr; Systems &amp; Lists) instead of one long scroll. Systems &amp; Lists is grouped IM / Admin / IX.</div>
+      <div class="screen-desc">v2.5: swapped every date field from <code>Classic/DatePicker@2.6.0</code> (the flat square boxes) to <code>DatePicker@0.0.46</code> &mdash; confirmed-working rounded/modern control from the Bible's own known-good list, not <code>ModernDatePicker</code> (that one has a real confirmed <code>SelectedDate</code> authoring bug). v2.4: fixed Start/Leaving Date showing simultaneously regardless of Movement Type. v2.0: rebuilt as a 3-stage wizard (Core Details &rarr; Access &amp; Accounts &rarr; Systems &amp; Lists).</div>
     </div>
     <div class="screen-cta">Open and copy &rarr;</div>
   </a>
-  <a class="screen-card" href="screens/scrAdd.html?v=1.12">
+  <a class="screen-card" href="screens/scrAdd.html?v=1.13">
     <div>
       <div class="screen-number">Screen 3</div>
       <div class="screen-name">scrAdd</div>
-      <div class="screen-desc">Add a new movement record. Name, movement type, position, staff number, role, start date, notes. Validates required fields before saving.</div>
+      <div class="screen-desc">v1.13: same date-picker swap as scrRecord (rounded <code>DatePicker@0.0.46</code>, not the flat Classic boxes). Still the old pre-wizard styling otherwise &mdash; not yet brought in line with the new look. Add a new movement record: name, movement type, position, staff number, role, start date, notes.</div>
     </div>
     <div class="screen-cta">Open and copy &rarr;</div>
   </a>

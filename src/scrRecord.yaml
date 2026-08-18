@@ -368,13 +368,13 @@ Screens:
             Size: =11
             Visible: =(varWizardStage = "core") && (varSelectedRecord.'Movement Type'.Value = "New to MoD/Branch" || varSelectedRecord.'Movement Type'.Value = "Moving to Branch")
       - dpStartDate:
-          Control: Classic/DatePicker@2.6.0
+          Control: DatePicker@0.0.46
           Properties:
             X: =28
             Y: =396
             Width: =300
             Height: =40
-            DefaultDate: =varSelectedRecord.'Confirmed Start Date'
+            SelectedDate: =varSelectedRecord.'Confirmed Start Date'
             Visible: =(varWizardStage = "core") && (varSelectedRecord.'Movement Type'.Value = "New to MoD/Branch" || varSelectedRecord.'Movement Type'.Value = "Moving to Branch")
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
@@ -394,13 +394,13 @@ Screens:
             Size: =11
             Visible: =(varWizardStage = "core") && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
       - dpLeavingDate:
-          Control: Classic/DatePicker@2.6.0
+          Control: DatePicker@0.0.46
           Properties:
             X: =700
             Y: =396
             Width: =300
             Height: =40
-            DefaultDate: =varSelectedRecord.'Confirmed Leaving Date'
+            SelectedDate: =varSelectedRecord.'Confirmed Leaving Date'
             Visible: =(varWizardStage = "core") && (varSelectedRecord.'Movement Type'.Value = "Leaving Branch" || varSelectedRecord.'Movement Type'.Value = "Leaving MoD")
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
@@ -802,13 +802,13 @@ Screens:
             Size: =11
             Visible: =(varWizardStage = "access") && (varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes")
       - dpAccessUpgradeDate:
-          Control: Classic/DatePicker@2.6.0
+          Control: DatePicker@0.0.46
           Properties:
             X: =700
             Y: =500
             Width: =300
             Height: =40
-            DefaultDate: =varSelectedRecord.'Upgrade M365 License Date'
+            SelectedDate: =varSelectedRecord.'Upgrade M365 License Date'
             Visible: =(varWizardStage = "access") && (varSelectedRecord.Upgrade_x0020_M365_x0020_License.Value = "Yes")
             OnChange: |-
               =Patch('Staff Movements (LTD)', varSelectedRecord,
@@ -1820,13 +1820,13 @@ Screens:
             Size: =12
             Visible: =varShowLeaverPanel
       - dpLeaverPanelDate:
-          Control: Classic/DatePicker@2.6.0
+          Control: DatePicker@0.0.46
           Properties:
             X: =403
             Y: =244
             Width: =300
             Height: =40
-            DefaultDate: =If(IsBlank(varSelectedRecord.'Confirmed Leaving Date'), Today(), varSelectedRecord.'Confirmed Leaving Date')
+            SelectedDate: =If(IsBlank(varSelectedRecord.'Confirmed Leaving Date'), Today(), varSelectedRecord.'Confirmed Leaving Date')
             Visible: =varShowLeaverPanel
       - btnLeaverPanelSave:
           Control: ModernButton@1.0.0
