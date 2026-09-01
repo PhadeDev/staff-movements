@@ -5,156 +5,217 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Staff Movements — PowerApps</title>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: #0f0f1a;
-      color: #e8e8f0;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
+    :root {
+      --bg: #f6f8fb;
+      --paper: #ffffff;
+      --ink: #172033;
+      --muted: #637084;
+      --line: #d9e1ec;
+      --primary: #004e42;
+      --primary-soft: #e8f4ef;
+      --green: #1f7a4d;
+      --amber: #a86500;
+      --red: #a33a3a;
+      --code-bg: #111827;
+      --code-ink: #f8fafc;
+      --callout-warn-bg: #fff7e8;
+      --callout-ok-bg: #edf8f2;
+      --table-head-bg: #eef3f8;
+      --table-head-ink: #26364d;
+      --code-pill-bg: #eef3f8;
+      --code-pill-border: #dce5f0;
+      --link-card-bg: #fbfdff;
+      --radius: 10px;
+      --shadow: 0 12px 32px rgba(20, 34, 56, .10);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    h1 { font-size: 1.8rem; font-weight: 600; color: #c8b8ff; margin-bottom: 8px; }
-    .subtitle { color: #888; font-size: 0.95rem; margin-bottom: 40px; }
-    h2 { font-size: 1.2rem; color: #a0c0e0; margin: 40px 0 16px; border-bottom: 1px solid #2a2a3a; padding-bottom: 8px; }
-    h3 { font-size: 1rem; color: #e8e8f0; margin: 24px 0 8px; }
-    p { color: #aaa; line-height: 1.6; margin-bottom: 12px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-bottom: 24px; }
-    th { background: #1a1a2e; color: #c8b8ff; text-align: left; padding: 8px 12px; border: 1px solid #2a2a3a; }
-    td { padding: 8px 12px; border: 1px solid #2a2a3a; color: #d0d0e0; vertical-align: top; }
-    tr:nth-child(even) td { background: #131320; }
-    code { background: #1e1e30; padding: 2px 6px; border-radius: 4px; font-size: 0.85em; color: #c8d8f0; font-family: 'Cascadia Code', 'Consolas', monospace; }
-    .code-block { position: relative; margin: 12px 0 24px; }
-    pre {
-      background: #1a1a2e;
-      color: #c8d8f0;
-      padding: 16px;
-      border-radius: 8px;
-      font-family: 'Cascadia Code', 'Consolas', monospace;
-      font-size: 0.82rem;
-      line-height: 1.55;
-      overflow-x: auto;
-      white-space: pre;
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0f1520; --paper: #161d2b; --ink: #e8ecf3; --muted: #93a1b8; --line: #2a3347;
+        --primary: #4fd1a5; --primary-soft: rgba(79,209,165,.14); --green: #52c98a; --amber: #d9a441; --red: #e2726f;
+        --callout-warn-bg: rgba(217,164,65,.14); --callout-ok-bg: rgba(82,201,138,.14);
+        --table-head-bg: #1c2434; --table-head-ink: #cdd6e6;
+        --code-pill-bg: #1c2434; --code-pill-border: #34405a;
+        --link-card-bg: #1c2434;
+      }
     }
-    .copy-btn {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      padding: 4px 12px;
-      background: #7c4dff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.78rem;
-      transition: background 0.15s;
+    :root[data-theme="dark"] {
+      --bg: #0f1520; --paper: #161d2b; --ink: #e8ecf3; --muted: #93a1b8; --line: #2a3347;
+      --primary: #4fd1a5; --primary-soft: rgba(79,209,165,.14); --green: #52c98a; --amber: #d9a441; --red: #e2726f;
+      --callout-warn-bg: rgba(217,164,65,.14); --callout-ok-bg: rgba(82,201,138,.14);
+      --table-head-bg: #1c2434; --table-head-ink: #cdd6e6;
+      --code-pill-bg: #1c2434; --code-pill-border: #34405a;
+      --link-card-bg: #1c2434;
     }
-    .copy-btn:hover { background: #6a3de8; }
-    .copy-btn.ok { background: #2a7d4e; }
-    .screen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
-    .screen-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: #1a1a2e;
-      border: 1px solid #2a2a3a;
-      border-radius: 12px;
-      padding: 20px;
-      text-decoration: none;
-      color: inherit;
-      transition: border-color 0.15s, background 0.15s;
+    #theme-toggle {
+      position: fixed; top: 14px; right: 14px; z-index: 50;
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--line); background: var(--paper); color: var(--ink);
+      font-size: 1.1rem; cursor: pointer; box-shadow: var(--shadow);
     }
-    .screen-card:hover { border-color: #7c4dff; background: #1e1e35; }
-    .screen-number { font-size: 0.75rem; color: #666; margin-bottom: 8px; }
-    .screen-name { font-size: 1rem; font-weight: 600; color: #c8b8ff; margin-bottom: 6px; }
-    .screen-desc { font-size: 0.82rem; color: #888; line-height: 1.4; }
-    .screen-cta { margin-top: 16px; font-size: 0.82rem; color: #7c4dff; }
-    .note { background: #1a2a1a; border-left: 3px solid #2a7d4e; padding: 12px 16px; border-radius: 4px; font-size: 0.85rem; color: #aaa; margin: 16px 0; }
-    .warning { background: #2a1a1a; border-left: 3px solid #7d2a2a; padding: 12px 16px; border-radius: 4px; font-size: 0.85rem; color: #aaa; margin: 16px 0; }
-    ol, ul { padding-left: 24px; color: #aaa; font-size: 0.9rem; line-height: 2; }
-    a.back { font-size: 0.82rem; color: #666; text-decoration: none; display: inline-block; margin-bottom: 32px; }
-    a.back:hover { color: #999; }
-    .note-open-link {
-      font-size: 0.82rem; color: #7c4dff; background: none; border: none; cursor: pointer;
-      font-family: inherit; display: inline-block; margin-left: 16px; margin-bottom: 32px; text-decoration: underline;
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); line-height: 1.6; }
+    a { color: var(--primary); }
+    .shell { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 24px; max-width: 1320px; margin: 0 auto; padding: 24px; }
+    aside {
+      position: sticky; top: 18px; align-self: start; max-height: calc(100vh - 36px); overflow: auto;
+      background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px;
     }
-    .note-open-link:hover { color: #9a75ff; }
-    #note-dialog { border: 1px solid #2a2a3a; border-radius: 12px; padding: 0; background: #1a1a2e; color: #e8e8f0; width: min(560px, 92vw); }
-    #note-dialog::backdrop { background: rgba(0,0,0,.6); }
+    aside h2 { margin: 0 0 4px; font-size: 1.05rem; }
+    aside p { margin: 0 0 14px; color: var(--muted); font-size: .9rem; }
+    nav { display: grid; gap: 4px; }
+    nav a, nav button {
+      text-decoration: none; color: var(--muted); border-radius: 8px; padding: 7px 9px; font-size: .9rem;
+      background: none; border: none; font-family: inherit; text-align: left; cursor: pointer; display: block; width: 100%;
+    }
+    nav a:hover, nav button:hover { background: var(--primary-soft); color: var(--primary); }
+    main { min-width: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 30px; }
+    .topline { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+    .pill {
+      display: inline-flex; align-items: center; min-height: 28px; padding: 4px 10px; border-radius: 999px;
+      background: var(--primary-soft); color: var(--primary); font-size: .82rem; font-weight: 700;
+    }
+    .pill.new { background: var(--callout-ok-bg); color: var(--green); }
+    .pill.existing { background: var(--table-head-bg); color: var(--table-head-ink); }
+    h1 { margin: 0 0 8px; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; }
+    .lead { margin: 0 0 24px; max-width: 860px; color: var(--muted); font-size: 1.05rem; }
+    section { border-top: 1px solid var(--line); margin-top: 30px; padding-top: 26px; }
+    section:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+    h2 { margin: 0 0 12px; font-size: 1.5rem; }
+    h3 { margin: 24px 0 10px; font-size: 1.1rem; }
+    .callout { border-left: 4px solid var(--primary); background: var(--primary-soft); border-radius: 8px; padding: 14px 16px; margin: 16px 0; }
+    .callout.warn { border-left-color: var(--amber); background: var(--callout-warn-bg); }
+    .callout.ok { border-left-color: var(--green); background: var(--callout-ok-bg); }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; overflow: hidden; border: 1px solid var(--line); border-radius: 8px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; font-size: .88rem; }
+    th { background: var(--table-head-bg); color: var(--table-head-ink); font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; }
+    tr:last-child td { border-bottom: 0; }
+    code { font-family: var(--mono); background: var(--code-pill-bg); border: 1px solid var(--code-pill-border); border-radius: 6px; padding: 1px 5px; font-size: .9em; }
+    .code-card { background: var(--code-bg); color: var(--code-ink); border-radius: 10px; overflow: hidden; margin: 14px 0 22px; }
+    .code-toolbar { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,.12); color: #cbd5e1; font-size: .85rem; }
+    .code-toolbar button { border: 0; border-radius: 8px; padding: 7px 10px; font-weight: 700; background: var(--primary-soft); color: var(--primary); cursor: pointer; font-family: var(--sans); font-size: .82rem; }
+    .code-toolbar button.ok { background: var(--callout-ok-bg); color: var(--green); }
+    pre { margin: 0; padding: 16px; overflow: auto; white-space: pre; font-family: var(--mono); font-size: .88rem; line-height: 1.55; }
+    ul, ol { padding-left: 1.3rem; }
+    li { margin: 6px 0; }
+    .links { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 14px; }
+    .link-card { display: flex; flex-direction: column; justify-content: space-between; gap: 10px; border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: var(--link-card-bg); text-decoration: none; }
+    .link-card strong { color: var(--ink); display: block; font-size: 1rem; }
+    .link-card p { color: var(--muted); font-size: .85rem; margin: 4px 0 0; line-height: 1.4; }
+    .link-card .open { color: var(--primary); font-size: .85rem; font-weight: 700; }
+    #note-dialog { border: 1px solid var(--line); border-radius: 12px; padding: 0; background: var(--paper); color: var(--ink); width: min(560px, 92vw); }
+    #note-dialog::backdrop { background: rgba(10,16,26,.5); }
     .note-form { padding: 20px; display: flex; flex-direction: column; gap: 10px; }
     .note-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .note-head h2 { margin: 0; font-size: 1.05rem; color: #c8b8ff; }
-    .note-x { border: none; background: none; color: #888; font-size: 1.4rem; line-height: 1; cursor: pointer; }
-    .note-hint-text { margin: 0; color: #888; font-size: .82rem; }
-    .note-label { font-size: .82rem; font-weight: 700; color: #aaa; }
-    .note-hint { font-weight: 400; color: #666; }
-    #note-password, #note-text {
-      padding: 8px 10px; border: 1px solid #2a2a3a; border-radius: 7px;
-      background: #0f0f1a; color: #e8e8f0; font: inherit;
-    }
+    .note-head h2 { margin: 0; font-size: 1.05rem; }
+    .note-x { border: none; background: none; color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; }
+    .note-hint-text { margin: 0; color: var(--muted); font-size: .82rem; }
+    .note-label { font-size: .82rem; font-weight: 700; color: var(--muted); }
+    .note-hint { font-weight: 400; color: var(--muted); }
+    #note-password, #note-text { padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--ink); font: inherit; }
     #note-text { resize: vertical; font-family: inherit; line-height: 1.4; }
-    #note-submit { border: none; border-radius: 7px; padding: 9px 16px; font: inherit; font-weight: 700; background: #7c4dff; color: #fff; cursor: pointer; }
-    #note-submit:hover { background: #6a3de8; }
+    #note-submit { border: none; border-radius: 7px; padding: 9px 16px; font: inherit; font-weight: 700; background: var(--primary); color: #fff; cursor: pointer; }
     .note-actions { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-    .note-status { font-size: .82rem; color: #888; }
-    .badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; margin-left: 6px; }
-    .badge-new { background: #1a3a1a; color: #4a9; }
-    .badge-existing { background: #1a1a3a; color: #66a; }
+    .note-status { font-size: .82rem; color: var(--muted); }
+    @media (max-width: 860px) {
+      .shell { display: block; padding: 12px; }
+      aside { position: static; margin-bottom: 14px; }
+      main { padding: 18px; }
+      table { display: block; overflow-x: auto; }
+    }
   </style>
 </head>
 <body>
+  <button id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">&#127769;</button>
+  <script>
+  (function(){
+    var key='pa-theme', root=document.documentElement, btn=document.getElementById('theme-toggle');
+    function apply(t){root.setAttribute('data-theme',t);btn.textContent=t==='dark'?'☀️':'🌙';}
+    apply(localStorage.getItem(key)||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+    btn.addEventListener('click',function(){
+      var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+      apply(next); localStorage.setItem(key,next);
+    });
+  })();
+  </script>
+  <div class="shell">
+    <aside>
+      <h2>Staff Movements</h2>
+      <p>v2.6 build guide. Tracks staff joining and leaving the branch.</p>
+      <nav>
+        <a href="https://powerapps.pages.dev/">&larr; Guide library</a>
+        <button type="button" id="open-note">Leave a note for Claude</button>
+        <a href="#before-you-start">Before You Start</a>
+        <a href="#data-connection">Data Connection</a>
+        <a href="#list-changes">SharePoint List Changes</a>
+        <a href="#onstart">App.OnStart</a>
+        <a href="#screens">Screens</a>
+        <a href="#paste-order">Paste Order</a>
+        <a href="#issues">Issues</a>
+      </nav>
+    </aside>
 
-<a class="back" href="https://powerapps.pages.dev/">&#8592; Guide Library</a>
-<button type="button" id="open-note" class="note-open-link">Leave a note for Claude</button>
-<h1>Staff Movements <span style="font-size:0.65em;font-weight:400;color:#666;vertical-align:middle;margin-left:8px;">v2.6</span></h1>
-<p style="font-size:0.75rem;color:#3a3a55;font-family:'Cascadia Code','Consolas',monospace;margin-bottom:4px;">Built 24 Jun 2026  04:32 BST</p>
-<p class="subtitle">Canvas app — tracks staff joining and leaving the branch. Four tab views (All / Admin / IX / IM), per-duty Set Today buttons, and a leaver lifecycle workflow. Wraps the existing <code>Staff Movements</code> SharePoint list.</p>
+    <main>
+      <div class="topline">
+        <span class="pill">v2.6</span>
+        <span class="pill">Built 24 Jun 2026</span>
+      </div>
+      <h1>Staff Movements</h1>
+      <p class="lead">Canvas app &mdash; tracks staff joining and leaving the branch. Four tab views (All / Admin / IX / IM), per-duty Set Today buttons, and a leaver lifecycle workflow. Wraps the existing <code>Staff Movements</code> SharePoint list.</p>
 
-<h2>Before You Start</h2>
-<ol>
-  <li>Add the one new column to the existing SharePoint list (see below).</li>
-  <li>Open Power Apps Studio &rarr; New blank canvas app (tablet landscape, 1366&times;768).</li>
-  <li>Add the data connection listed below.</li>
-  <li>Set <strong>App &rarr; OnStart</strong> using the code block below.</li>
-  <li>Create 4 blank screens, then paste each YAML in order.</li>
-</ol>
+      <section id="before-you-start">
+        <h2>Before You Start</h2>
+        <ol>
+          <li>Add the one new column to the existing SharePoint list (see below).</li>
+          <li>Open Power Apps Studio &rarr; New blank canvas app (tablet landscape, 1366&times;768).</li>
+          <li>Add the data connection listed below.</li>
+          <li>Set <strong>App &rarr; OnStart</strong> using the code block below.</li>
+          <li>Create 4 blank screens, then paste each YAML in order.</li>
+        </ol>
+      </section>
 
-<h2>Data Connection</h2>
-<p>Add this in the Data panel before pasting any YAML:</p>
-<ul>
-  <li><strong>SharePoint</strong> &rarr; connect to your SharePoint site &rarr; select <code>Staff Movements</code></li>
-</ul>
+      <section id="data-connection">
+        <h2>Data Connection</h2>
+        <p>Add this in the Data panel before pasting any YAML:</p>
+        <ul>
+          <li><strong>SharePoint</strong> &rarr; connect to your SharePoint site &rarr; select <code>Staff Movements</code></li>
+        </ul>
+      </section>
 
-<h2>SharePoint List Changes</h2>
-<p>The existing <code>Staff Movements</code> list is used as-is. One new column must be added:</p>
+      <section id="list-changes">
+        <h2>SharePoint List Changes</h2>
+        <p>The existing <code>Staff Movements</code> list is used as-is. One new column must be added:</p>
 
-<h3>List: <code>Staff Movements</code> <span class="badge badge-existing">existing</span></h3>
-<div class="note">This list already exists. Do not recreate it. Only add the one new column below.</div>
-<table>
-  <thead><tr><th>Column name</th><th>Type</th><th>Notes</th></tr></thead>
-  <tbody>
-    <tr><td><code>DateCompleted</code></td><td>Date and Time (Date Only)</td><td><span class="badge badge-new">ADD THIS</span> No space in name. Not Required. Used to calculate the 7-day archive window.</td></tr>
-    <tr><td>All other columns</td><td>—</td><td>Leave as-is. The app uses internal column names directly from the schema.</td></tr>
-  </tbody>
-</table>
+        <h3>List: <code>Staff Movements</code> <span class="pill existing">existing</span></h3>
+        <div class="callout">This list already exists. Do not recreate it. Only add the one new column below.</div>
+        <table>
+          <thead><tr><th>Column name</th><th>Type</th><th>Notes</th></tr></thead>
+          <tbody>
+            <tr><td><code>DateCompleted</code></td><td>Date and Time (Date Only)</td><td><span class="pill new">ADD THIS</span> No space in name. Not Required. Used to calculate the 7-day archive window.</td></tr>
+            <tr><td>All other columns</td><td>&mdash;</td><td>Leave as-is. The app uses internal column names directly from the schema.</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn">
+          <strong>Column name gotchas:</strong> Some columns have URL-encoded internal names due to special characters in the original names.
+          The app uses these internal names exactly as they appear in SharePoint:
+          <ul style="margin-top:8px;">
+            <li><code>Add_x0020_to_x0020_ACOS_x0020_Ex</code> &mdash; displays as "Added/Removed Branch Execs Invites"</li>
+            <li><code>Upgrade_x0020_M365_x0020_License</code> &mdash; displays as "Upgrade M365 License"</li>
+            <li><code>What_0Mailboxes</code> &mdash; displays as "What 0Mailboxes are required?"</li>
+            <li><code>Staff_x002f_ServiceNo</code> &mdash; displays as "Staff/Service No or PUID"</li>
+          </ul>
+          If any of these Patch calls fail with a field-not-found error, check the actual internal name in the SharePoint list settings and update the formula.
+        </div>
+      </section>
 
-<div class="warning">
-  <strong>Column name gotchas:</strong> Some columns have URL-encoded internal names due to special characters in the original names.
-  The app uses these internal names exactly as they appear in SharePoint:
-  <ul style="margin-top:8px;">
-    <li><code>Add_x0020_to_x0020_ACOS_x0020_Ex</code> — displays as "Added/Removed Branch Execs Invites"</li>
-    <li><code>Upgrade_x0020_M365_x0020_License</code> — displays as "Upgrade M365 License"</li>
-    <li><code>What_0Mailboxes</code> — displays as "What 0Mailboxes are required?"</li>
-    <li><code>Staff_x002f_ServiceNo</code> — displays as "Staff/Service No or PUID"</li>
-  </ul>
-  If any of these Patch calls fail with a field-not-found error, check the actual internal name in the SharePoint list settings and update the formula.
-</div>
-
-<h2>App.OnStart</h2>
-<p>Paste into <strong>App &rarr; OnStart</strong> in Power Apps Studio. Do not put this inside any screen.</p>
-<div class="code-block">
-  <button class="copy-btn" onclick="copyBlock(this, 'on-start')">Copy</button>
-  <pre id="on-start">// Staff Movements — App.OnStart
+      <section id="onstart">
+        <h2>App.OnStart</h2>
+        <p>Paste into <strong>App &rarr; OnStart</strong> in Power Apps Studio. Do not put this inside any screen.</p>
+        <div class="code-card">
+          <div class="code-toolbar"><span>v2.6 &mdash; Updated 24 Jun 2026 04:32 BST</span><button onclick="copyCode(this)">Copy</button></div>
+          <pre>// Staff Movements — App.OnStart
 // ─────────────────────────────────────────────────────────────
 // TAB EMAIL MAPPINGS  (edit these three strings to reassign tabs)
 //   IX    = Allan Hamilton   (allan.hamilton775@mod.gov.uk)
@@ -186,72 +247,70 @@ Set(varErrEditMovType, false);
 Set(varErrAddTitle, false);
 Set(varErrAddMovType, false);
 ClearCollect(colMovements, 'Staff Movements (LTD)')</pre>
-</div>
+        </div>
+      </section>
 
-<h2>Screens</h2>
-<p>Create a new blank screen for each one, then paste in this order. Each screen imports as a complete unit.</p>
-<div class="screen-grid">
-  <a class="screen-card" href="screens/scrDashboard.html?v=2.3">
-    <div>
-      <div class="screen-number">Screen 1</div>
-      <div class="screen-name">scrDashboard</div>
-      <div class="screen-desc">v2.3: the "pending duties" and Complete/Active tags in the movement list are now real rounded pills (a filled, radius'd button sitting behind a transparent label) instead of flat-cornered coloured rectangles &mdash; Labels can't take a radius in Power Apps, so any "badge" built from a Label alone is always going to look like a square block. v2.2: pending-duties counts realigned to match scrRecord's Admin/IX/IM grouping.</div>
-    </div>
-    <div class="screen-cta">Open and copy &rarr;</div>
-  </a>
-  <a class="screen-card" href="screens/scrRecord.html?v=2.6">
-    <div>
-      <div class="screen-number">Screen 2</div>
-      <div class="screen-name">scrRecord</div>
-      <div class="screen-desc">v2.6: the stage tab bar is now a real numbered-circle stepper (filled/outlined circles, connecting lines that fill in as you progress, checkmarks on completed stages) instead of three flat rectangular tab buttons &mdash; same visual language as the concept artifact. Movement Type and Complete badges are now proper rounded pills too &mdash; a filled, radius'd button behind a transparent label, since Labels can't take a radius in Power Apps. v2.5: swapped every date field to the rounded <code>DatePicker@0.0.46</code> control, away from the flat square <code>Classic/DatePicker</code>. v2.4: fixed Start/Leaving Date showing simultaneously. v2.0: rebuilt as a 3-stage wizard.</div>
-    </div>
-    <div class="screen-cta">Open and copy &rarr;</div>
-  </a>
-  <a class="screen-card" href="screens/scrAdd.html?v=1.13">
-    <div>
-      <div class="screen-number">Screen 3</div>
-      <div class="screen-name">scrAdd</div>
-      <div class="screen-desc">v1.13: same date-picker swap as scrRecord (rounded <code>DatePicker@0.0.46</code>, not the flat Classic boxes). Still the old pre-wizard styling otherwise &mdash; not yet brought in line with the new look. Add a new movement record: name, movement type, position, staff number, role, start date, notes.</div>
-    </div>
-    <div class="screen-cta">Open and copy &rarr;</div>
-  </a>
-  <a class="screen-card" href="screens/scrArchive.html?v=1.12">
-    <div>
-      <div class="screen-number">Screen 4</div>
-      <div class="screen-name">scrArchive</div>
-      <div class="screen-desc">Read-only archive of records marked complete more than 7 days ago. Tap a row to view the full record.</div>
-    </div>
-    <div class="screen-cta">Open and copy &rarr;</div>
-  </a>
-</div>
+      <section id="screens">
+        <h2>Screens</h2>
+        <p>Create a new blank screen for each one, then paste in this order. Each screen imports as a complete unit.</p>
+        <div class="links">
+          <a class="link-card" href="screens/scrDashboard.html?v=2.3">
+            <div><span class="pill">Screen 1</span><strong style="margin-top:8px;display:block">scrDashboard</strong>
+              <p>v2.3: the "pending duties" and Complete/Active tags in the movement list are now real rounded pills (a filled, radius'd button sitting behind a transparent label) instead of flat-cornered coloured rectangles &mdash; Labels can't take a radius in Power Apps, so any "badge" built from a Label alone is always going to look like a square block. v2.2: pending-duties counts realigned to match scrRecord's Admin/IX/IM grouping.</p></div>
+            <div class="open">Open and copy &rarr;</div>
+          </a>
+          <a class="link-card" href="screens/scrRecord.html?v=2.6">
+            <div><span class="pill">Screen 2</span><strong style="margin-top:8px;display:block">scrRecord</strong>
+              <p>v2.6: the stage tab bar is now a real numbered-circle stepper (filled/outlined circles, connecting lines that fill in as you progress, checkmarks on completed stages) instead of three flat rectangular tab buttons &mdash; same visual language as the concept artifact. Movement Type and Complete badges are now proper rounded pills too &mdash; a filled, radius'd button behind a transparent label, since Labels can't take a radius in Power Apps. v2.5: swapped every date field to the rounded <code>DatePicker@0.0.46</code> control, away from the flat square <code>Classic/DatePicker</code>. v2.4: fixed Start/Leaving Date showing simultaneously. v2.0: rebuilt as a 3-stage wizard.</p></div>
+            <div class="open">Open and copy &rarr;</div>
+          </a>
+          <a class="link-card" href="screens/scrAdd.html?v=1.13">
+            <div><span class="pill">Screen 3</span><strong style="margin-top:8px;display:block">scrAdd</strong>
+              <p>v1.13: same date-picker swap as scrRecord (rounded <code>DatePicker@0.0.46</code>, not the flat Classic boxes). Still the old pre-wizard styling otherwise &mdash; not yet brought in line with the new look. Add a new movement record: name, movement type, position, staff number, role, start date, notes.</p></div>
+            <div class="open">Open and copy &rarr;</div>
+          </a>
+          <a class="link-card" href="screens/scrArchive.html?v=1.12">
+            <div><span class="pill">Screen 4</span><strong style="margin-top:8px;display:block">scrArchive</strong>
+              <p>Read-only archive of records marked complete more than 7 days ago. Tap a row to view the full record.</p></div>
+            <div class="open">Open and copy &rarr;</div>
+          </a>
+        </div>
+      </section>
 
-<h2>Paste Order</h2>
-<ol>
-  <li>Create 4 blank screens in Power Apps (they can be named anything — the YAML renames them on paste).</li>
-  <li>Click the first blank screen, open the three-dot menu, choose <strong>Paste YAML</strong>.</li>
-  <li>Repeat for each screen in order: Dashboard, Record, Add, Archive.</li>
-  <li>Set the startup screen to <code>scrDashboard</code> in App &rarr; StartScreen.</li>
-</ol>
+      <section id="paste-order">
+        <h2>Paste Order</h2>
+        <ol>
+          <li>Create 4 blank screens in Power Apps (they can be named anything &mdash; the YAML renames them on paste).</li>
+          <li>Click the first blank screen, open the three-dot menu, choose <strong>Paste YAML</strong>.</li>
+          <li>Repeat for each screen in order: Dashboard, Record, Add, Archive.</li>
+          <li>Set the startup screen to <code>scrDashboard</code> in App &rarr; StartScreen.</li>
+        </ol>
 
-<div class="note">
-  <strong>Tab auto-detection:</strong> The app auto-selects the IX or IM tab based on the logged-in user's email. To change mappings, edit the two email strings in App.OnStart. To add a third named user, add another line to the Switch statement.
-</div>
+        <div class="callout ok">
+          <strong>Tab auto-detection:</strong> The app auto-selects the IX or IM tab based on the logged-in user's email. To change mappings, edit the two email strings in App.OnStart. To add a third named user, add another line to the Switch statement.
+        </div>
 
-<div class="note">
-  <strong>Movement Type options in the app:</strong> "New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD". If your SharePoint list has different Choice option strings, update the dropdown Items lists in scrAdd and scrRecord to match exactly.
-</div>
+        <div class="callout ok">
+          <strong>Movement Type options in the app:</strong> "New to MoD/Branch", "Moving to Branch", "Leaving Branch", "Leaving MoD". If your SharePoint list has different Choice option strings, update the dropdown Items lists in scrAdd and scrRecord to match exactly.
+        </div>
+      </section>
 
-<h2>Issues</h2>
-<p>Found a problem or need a change? <a href="https://github.com/PhadeDev/staff-movements/issues" style="color:#7c4dff">Report it in the issues tracker</a>.</p>
+      <section id="issues">
+        <h2>Issues</h2>
+        <p>Found a problem or need a change? <a href="https://github.com/PhadeDev/staff-movements/issues">Report it in the issues tracker</a>.</p>
+      </section>
+    </main>
+  </div>
 
 <script>
-async function copyBlock(btn, id) {
-  const text = document.getElementById(id).textContent;
+async function copyCode(btn) {
+  const pre = btn.closest('.code-card').querySelector('pre');
+  const text = pre.innerText;
+  const orig = btn.textContent;
+  const showOk = () => { btn.textContent = 'Copied!'; btn.classList.add('ok'); setTimeout(() => { btn.textContent = orig; btn.classList.remove('ok'); }, 2500); };
   try {
     await navigator.clipboard.writeText(text);
-    btn.textContent = '✓ Copied!';
-    btn.className = 'copy-btn ok';
-    setTimeout(() => { btn.textContent = 'Copy'; btn.className = 'copy-btn'; }, 3000);
+    showOk();
   } catch (e) {
     btn.textContent = 'Failed';
   }
